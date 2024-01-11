@@ -1,0 +1,66 @@
+server:
+  jetty:
+    threads:
+      acceptors: 4
+      selectors: 8
+  port: 8004
+  servlet:
+    context-path: /
+
+
+spring:
+  profiles:
+    include: common
+  application:
+    name: hxds-mps
+
+  redis:
+    database: 7
+    host: localhost
+    port: 6379
+    password: abc123456
+    jedis:
+      pool:
+        max-active: 1000
+        max-wait: -1ms
+        max-idle: 16
+        min-idle: 8
+
+  cloud:
+    inetutils:
+      preferred-networks: 127.0.0.1
+    nacos:
+      config:
+        group: DEFAULT_GROUP
+        file-extension: yaml
+        server-addr: 127.0.0.1:8848
+        prefix: ${spring.application.name}
+        namespace: hxds
+      discovery:
+        server-addr: 127.0.0.1:8848
+        namespace: hxds
+        username: nacos
+        password: nacos
+        heart-beat-interval: 1000
+        heart-beat-timeout: 1000
+        group: DEFAULT-GROUP
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 20MB
+      max-request-size: 20MB
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /doc-api.html
+  swagger-ui:
+    path: /swagger-ut.html
+    disable-swagger-default-url: on
+
+feign:
+  client:
+    config:
+      default:
+        connect-timeout: 10000
+        read-timeout: 300000

@@ -23,7 +23,8 @@
 		<module>bff-driver</module>
 		<module>bff-customer</module>
 		<module>gateway</module>
-	</modules>
+        <module>hxds-mps</module>
+    </modules>
 
 	<packaging>pom</packaging>
 
