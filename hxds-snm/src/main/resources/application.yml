@@ -1,0 +1,80 @@
+server:
+  jetty:
+    threads:
+      acceptors: 4
+      selectors: 8
+  port: 8003
+  servlet:
+    context-path: /
+
+spring:
+  profiles:
+    #??application-common.yml??
+    include: common
+  application:
+    name: hxds-snm
+  cloud:
+    inetutils:
+      #??????Nacos??IP??
+      preferred-networks: 127.0.0.1
+    nacos:
+      #??????web??????????
+      config:
+        group: DEFAULT_GROUP
+        file-extension: yaml
+        server-addr: 127.0.0.1:8848
+        prefix: ${spring.application.name]
+        namespace: hxds
+      discovery:
+        #??????Nacos??????discovery:
+        namespace: hxds
+        username: nacos
+        password: nacos
+        server-addr: 127.0.0.1:8848
+        heart-beat-interval: 1000
+        heart-beat-timeout: 1000
+        group: DEFAULT_GROUP
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: hxds
+      authentication-database: admin
+      username: root
+      password: abc123456
+      option:
+        min-connection-per-host: 0
+        max-connection-idle-time: 100
+
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 20MB
+      max-request-size: 20MB
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+
+logging:
+  level:
+    root: info
+  pattern:
+    console: "%d{yyyy/MM/dd HH:mm:ss}  %-5level  %msg%n"
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /doc-api.html
+  swagger-ui:
+    path: /swagger-ui.html
+    disable-swagger-default-url: on
+
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 10000
+        readTimeout: 300000
