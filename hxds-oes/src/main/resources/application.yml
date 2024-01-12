@@ -1,0 +1,94 @@
+server:
+  jetty:
+    threads:
+      acceptors: 4
+      selectors: 8
+  port: 8005
+  servlet:
+    context-path: /
+
+spring:
+  profiles:
+    #??application-common.yml??
+    include: common
+  application:
+    name: hxds-oes
+  cloud:
+    inetutils:
+      #??????Nacos??IP??
+      preferred-networks: 127.0.0.1
+    nacos:
+      #??????web??????????
+      config:
+        group: DEFAULT_GROUP
+        file-extension: yaml
+        server-addr: 127.0.0.1:8848
+        prefix: ${spring.application.name]
+        namespace: hxds
+      discovery:
+        #??????Nacos??????discovery:
+        namespace: hxds
+        username: nacos
+        password: nacos
+        server-addr: 127.0.0.1:8848
+        heart-beat-interval: 1000
+        heart-beat-timeout: 1000
+        group: DEFAULT_GROUP
+
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc://mysql://127.0.0.1:3307/hxds?useUnicode=true&characterEncoding=UTF-8&serverTimeZone=Asia/Shanghai
+      username: root
+      password: abc123456
+      initial-size: 4
+      max-active: 8
+      min-idle: 8
+      max-wait: 60000
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+
+  redis:
+    database: 6
+    host: 127.0.0.1
+    port: 6379
+    password: abc123456
+    jedis:
+      pool:
+        max-active: 1000
+        max-wait: -1ms
+        max-idle: 16
+        min-idle: 8
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 20MB
+      max-request-size: 20MB
+
+logging:
+  level:
+    root: info
+    com.leis.hxdsdr.db.dao: warn
+  pattern:
+    console: "%d{yyyy/MM/dd HH:mm:ss} %-5level %msg%n"
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /doc-api.html
+  swagger-ui:
+    path: /swagger-ui.html
+    disable-swagger-default-url: on
+
+tx-lcn:
+  client:
+    manager-address: 127.0.0.1:8070
+
+feign:
+  client:
+    config:
+      default:
+        connect-timeout: 10000
+        read-timeout: 300000
