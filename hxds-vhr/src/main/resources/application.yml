@@ -3,16 +3,19 @@ server:
     threads:
       acceptors: 4
       selectors: 8
-  port: 8005
+  port: 8008
   servlet:
     context-path: /
+    multipart:
+      max-request-size: 10MB
+      max-file-size: 2MB
 
 spring:
   profiles:
     #??application-common.yml??
     include: common
   application:
-    name: hxds-oes
+    name: hxds-vhr
   cloud:
     inetutils:
       #??????Nacos??IP??
@@ -50,23 +53,25 @@ spring:
       test-on-borrow: false
       test-on-return: false
 
-  redis:
-    database: 6
-    host: 127.0.0.1
-    port: 6379
-    password: abc123456
-    jedis:
-      pool:
-        max-active: 1000
-        max-wait: -1ms
-        max-idle: 16
-        min-idle: 8
   servlet:
     multipart:
       enabled: true
       max-file-size: 20MB
       max-request-size: 20MB
 
+mybatis:
+  mapper-locations: classpath*:mapper/*.xml
+  type-aliases-package: com.leis.hxds.vhr.db.pojo
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+
+logging:
+  level:
+    root: info
+    com.leis.hxds.vhr.db.dao: warn
+  pattern:
+    console: "%d{yyyy/MM/dd HH:mm:ss} %-5level %msg%n"
 
 springdoc:
   api-docs:
