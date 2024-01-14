@@ -30,11 +30,11 @@ public class PageUtils implements Serializable {
      */
     private List list;
 
-    public PageUtils(long totalCount, int pageSize, int pageIndex, List list) {
+    public PageUtils(List list, long totalCount, int pageIndex, int pageSize) {
+        this.list = list;
         this.totalCount = totalCount;
         this.pageSize = pageSize;
-        this.totalPage = (int) Math.ceil((double) totalCount / pageSize);
         this.pageIndex = pageIndex;
-        this.list = list;
+        this.totalPage = (int) Math.ceil((double) totalCount / pageSize);
     }
 }
