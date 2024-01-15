@@ -25,6 +25,7 @@
         <module>gateway</module>
         <module>hxds-mps</module>
         <module>hxds-nebula</module>
+        <module>gateway</module>
     </modules>
 
     <packaging>pom</packaging>

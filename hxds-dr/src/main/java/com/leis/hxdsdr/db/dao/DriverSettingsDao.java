@@ -8,7 +8,7 @@ import java.util.Map;
  * @Entity com.example.hxdsdr.db.pojo.DriverSettingsEntity
  */
 public interface DriverSettingsDao {
-
+    int insertDriverSettings(DriverSettingsEntity entity);
 }
 
 

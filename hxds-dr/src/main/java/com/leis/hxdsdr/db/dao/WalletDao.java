@@ -7,8 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public interface WalletDao {
-
-
+    int insert(WalletEntity entity);
 }
 
 
