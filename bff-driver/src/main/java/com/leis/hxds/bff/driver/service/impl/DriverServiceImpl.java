@@ -1,11 +1,13 @@
 package com.leis.hxds.bff.driver.service.impl;
 
 import cn.hutool.core.convert.Convert;
+import com.codingapi.txlcn.tc.annotation.LcnTransaction;
 import com.leis.hxds.bff.driver.controller.form.RegisterNewDriverForm;
 import com.leis.hxds.bff.driver.feign.DrServiceApi;
 import com.leis.hxds.bff.driver.service.DriverService;
 import com.leis.hxds.common.util.R;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -16,6 +18,8 @@ public class DriverServiceImpl implements DriverService {
     private DrServiceApi drServiceApi;
 
     @Override
+    @Transactional
+    @LcnTransaction
     public long registerNewDriver(RegisterNewDriverForm form) {
         R r = drServiceApi.registerNewDriver(form);
         long userId = Convert.toLong(r.get("userId"));
