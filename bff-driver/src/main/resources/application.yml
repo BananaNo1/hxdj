@@ -10,35 +10,31 @@ server:
 
 spring:
   profiles:
-    #??application-common.yml??
     include: common
   application:
     name: bff-driver
   cloud:
     inetutils:
-      #??????Nacos??IP??
-      preferred-networks: 127.0.0.1
+      preferred-networks: 192.168.241.130
     nacos:
-      #??????web??????????
       config:
         group: DEFAULT_GROUP
         file-extension: yaml
-        server-addr: 127.0.0.1:8848
-        prefix: ${spring.application.name]
+        server-addr: 192.168.241.130:8848
+        prefix: ${spring.application.name}
         namespace: hxds
       discovery:
-        #??????Nacos??????discovery:
         namespace: hxds
         username: nacos
         password: nacos
-        server-addr: 127.0.0.1:8848
+        server-addr: 192.168.241.130:8848
         heart-beat-interval: 1000
         heart-beat-timeout: 1000
         group: DEFAULT_GROUP
 
   redis:
     database: 3
-    host: localhost
+    host: 192.168.241.130
     port: 6379
     password: abc123456
     jedis:
@@ -74,7 +70,7 @@ springdoc:
 
 tx-lcn:
   client:
-    manager-address: 127.0.0.1:8070
+    manager-address: 192.168.241.130:8070
 
 feign:
   client:

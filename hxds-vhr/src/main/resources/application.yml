@@ -26,7 +26,7 @@ spring:
         group: DEFAULT_GROUP
         file-extension: yaml
         server-addr: 127.0.0.1:8848
-        prefix: ${spring.application.name]
+        prefix: ${spring.application.name}
         namespace: hxds
       discovery:
         #??????Nacos??????discovery:
@@ -42,7 +42,7 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc://mysql://127.0.0.1:3307/hxds?useUnicode=true&characterEncoding=UTF-8&serverTimeZone=Asia/Shanghai
+      url: jdbc:mysql://192.168.241.130:3307/hxds?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
       username: root
       password: abc123456
       initial-size: 4

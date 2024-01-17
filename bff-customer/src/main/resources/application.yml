@@ -24,7 +24,7 @@ spring:
         group: DEFAULT_GROUP
         file-extension: yaml
         server-addr: 127.0.0.1:8848
-        prefix: ${spring.application.name]
+        prefix: ${spring.application.name}
         namespace: hxds
       discovery:
         #配置子系统在Nacos上的注册信息
