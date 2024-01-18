@@ -3,13 +3,13 @@ spring:
 
 tencent:
   cloud:
-    appId: 腾讯云APPID
-    secretId: 腾讯云SecretId
-    secretKey: 腾讯云SecretKey
-    region-public: 公有存储桶所在地域
-    bucket-public: 公有存储桶名称
-    region-private: 私有存储桶所在地域
-    bucket-private: 私有存储桶名称
+    appId: 1323891151
+    secretId: AKID69DJXhiZO3ZuBVjtx44veXHrHYzWNyoM
+    secretKey: DIbuKmJveNBzjOsDPWYOGypfYP1gOwZ5
+    region-public: ap-guangzhou
+    bucket-public: hxds-public-1323891151
+    region-private: ap-guangzhou
+    bucket-private: hxds-private-1323891151
 
 wx:
   app-id: 你的微信小程序APPID
