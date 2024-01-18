@@ -4,8 +4,8 @@ spring:
 tencent:
   cloud:
     appId: 1323891151
-    secretId: AKID69DJXhiZO3ZuBVjtx44veXHrHYzWNyoM
-    secretKey: DIbuKmJveNBzjOsDPWYOGypfYP1gOwZ5
+    secretId: 
+    secretKey:
     region-public: ap-guangzhou
     bucket-public: hxds-public-1323891151
     region-private: ap-guangzhou
