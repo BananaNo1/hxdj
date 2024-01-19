@@ -73,4 +73,12 @@ public class DriverServiceImpl implements DriverService {
         walletDao.insert(walletEntity);
         return driverId;
     }
+
+    @Override
+    @Transactional
+    @LcnTransaction
+    public int updateDriverAuth(Map param) {
+        int rows = driverDao.updateDriverAuth(param);
+        return rows;
+    }
 }

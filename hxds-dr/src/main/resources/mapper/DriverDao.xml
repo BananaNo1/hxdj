@@ -16,7 +16,7 @@
 
     <insert id="registerNewDriver" parameterType="map">
         insert into tb_driver
-        set open_id = #{openId}, nickname = #{nickname}, photo = #{photo}, real_auth=1, summary = '{"level":0,"totalOrder":0,"weekOrder":0,"weekComment":0,"appeal":0}', archive = false, status = 1
+        set open_id = #{openId}, nickname = #{nickname}, photo = #{photo}, real_auth=1, summary = '{"level":0,"totalOrder":0,"weekOrder":0,"weekComment":0,"appeal":0}', archive = false, `status` = 1
     </insert>
 
     <select id="searchDriverId" parameterType="String" resultType="String">
@@ -24,6 +24,32 @@
         from tb_driver
         where open_id = #{openId}
     </select>
+
+    <update id="updateDriverAuth" parameterType="Map">
+        update tb_driver
+        set `name`            =#{name},
+            sex               = #{sex},
+            pid               = #{pid},
+            birthday          = #{birthday},
+            tel               = #{tel},
+            mail_address      = #{mailAddress},
+            contact_name      = #{contactName},
+            contact_tel       = #{contactTel},
+            email             = #{email},
+            real_auth         = 3,
+            idcard_address    = #{idCardAddress},
+            idcard_expiration = #{idCardExpiration},
+            idcard_front      = #{idCardFront},
+            idcard_back       = #{idCardBack},
+            idcard_holding=#{idCardHolding},
+            drcard_type       = #{drcardType},
+            drcard_expiration = #{drcardExpiration},
+            drcard_issue_date = #{drcardIssueDate},
+            drcard_front      = #{drcardFront},
+            drcard_back       = #{drcardBack},
+            drcard_holding    = #{drcardHolding}
+        where id = #{driverId}
+    </update>
 
 
 </mapper>

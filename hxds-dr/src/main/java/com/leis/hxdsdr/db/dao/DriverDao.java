@@ -16,6 +16,7 @@ public interface DriverDao {
 
     String searchDriverId(String openId);
 
+    int updateDriverAuth(Map param);
 }
 
 
