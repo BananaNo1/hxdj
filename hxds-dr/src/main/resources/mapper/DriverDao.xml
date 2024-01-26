@@ -51,5 +51,22 @@
         where id = #{driverId}
     </update>
 
+    <select id="searchDriverNameAndSex" parameterType="long" resultType="HashMap">
+        select name, sex
+        from tb_driver
+        where id = #{driverId}
+    </select>
 
+    <update id="updateDriverArchive" parameterType="long">
+        update tb_driver
+        set archive = 1
+        where id = #{driverId}
+    </update>
+
+    <select id="login" parameterType="String" resultType="hashmap">
+        select cast(id as char) as id, real_auth as realAuth, archive
+        from tb_driver
+        where `status` != 2
+          and open_id = #{openId}
+    </select>
 </mapper>

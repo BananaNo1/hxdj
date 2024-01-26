@@ -4,12 +4,15 @@ spring:
 tencent:
   cloud:
     appId: 1323891151
-    secretId: 
+    secretId:
     secretKey:
     region-public: ap-guangzhou
     bucket-public: hxds-public-1323891151
     region-private: ap-guangzhou
     bucket-private: hxds-private-1323891151
+    face:
+      groupName: hxds
+      region: ap-guangzhou
 
 wx:
   app-id: 你的微信小程序APPID
@@ -19,6 +22,6 @@ wx:
   cert-path: 商户数字证书文件路径（课程QQ群共享文件中获取）
 
 minio:
-  endpoint: http://192.168.241.130:9000
+  endpoint: http://192.168.241.131:9000
   access-key: root
   secret-key: abc123456

@@ -17,6 +17,12 @@ public interface DriverDao {
     String searchDriverId(String openId);
 
     int updateDriverAuth(Map param);
+
+    HashMap searchDriverNameAndSex(long driverId);
+
+    int updateDriverArchive(long driverId);
+
+    HashMap login(String openId);
 }
 
 
