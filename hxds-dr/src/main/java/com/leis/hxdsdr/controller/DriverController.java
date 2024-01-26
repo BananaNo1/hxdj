@@ -2,10 +2,7 @@ package com.leis.hxdsdr.controller;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.leis.hxds.common.util.R;
-import com.leis.hxdsdr.controller.form.CreateDriverFaceModelForm;
-import com.leis.hxdsdr.controller.form.LoginForm;
-import com.leis.hxdsdr.controller.form.RegisterNewDriverForm;
-import com.leis.hxdsdr.controller.form.UpdateDriverAuthForm;
+import com.leis.hxdsdr.controller.form.*;
 import com.leis.hxdsdr.service.DriverService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -55,5 +52,12 @@ public class DriverController {
     public R login(@RequestBody @Valid LoginForm form) {
         HashMap map = driverService.login(form.getCode());
         return R.ok().put("result", map);
+    }
+
+    @PostMapping("/searchDriverBaseInfo")
+    @Operation(summary = "查询司机基本信息")
+    public R searchDriverBaseInfo(@RequestBody @Valid SearchDriverBaseInfoForm form) {
+        HashMap result = driverService.searchDriverBaseInfo(form.getDriverId());
+        return R.ok().put("result", result);
     }
 }

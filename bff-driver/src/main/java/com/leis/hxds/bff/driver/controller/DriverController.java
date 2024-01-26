@@ -3,18 +3,12 @@ package com.leis.hxds.bff.driver.controller;
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.map.MapUtil;
-import com.leis.hxds.bff.driver.controller.form.CreateDriverFaceModelForm;
-import com.leis.hxds.bff.driver.controller.form.LoginForm;
-import com.leis.hxds.bff.driver.controller.form.RegisterNewDriverForm;
-import com.leis.hxds.bff.driver.controller.form.UpdateDriverAuthForm;
+import com.leis.hxds.bff.driver.controller.form.*;
 import com.leis.hxds.bff.driver.service.DriverService;
 import com.leis.hxds.common.util.R;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
@@ -70,5 +64,24 @@ public class DriverController {
             return R.ok().put("token", tokenValue).put("realAuth", realAuth).put("archive", archive);
         }
         return R.ok();
+    }
+
+    @GetMapping("/logout")
+    @Operation(summary = "退出系统")
+    @SaCheckLogin
+    public R logout() {
+        StpUtil.logout();
+        return R.ok();
+    }
+
+    @PostMapping("/searchDriverBaseInfo")
+    @Operation(summary = "查询司机基本信息")
+    @SaCheckLogin
+    public R searchDriverBaseInfo() {
+        long driverId = StpUtil.getLoginIdAsLong();
+        SearchDriverBaseInfoForm form = new SearchDriverBaseInfoForm();
+        form.setDriverId(driverId);
+        HashMap map = driverService.searchDriverBaseInfo(form);
+        return R.ok().put("result", map);
     }
 }

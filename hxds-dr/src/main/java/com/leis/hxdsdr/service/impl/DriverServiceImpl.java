@@ -3,6 +3,7 @@ package com.leis.hxdsdr.service.impl;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import com.codingapi.txlcn.tc.annotation.LcnTransaction;
 import com.leis.hxds.common.exception.HxdsException;
 import com.leis.hxds.common.util.MicroAppUtil;
@@ -141,6 +142,14 @@ public class DriverServiceImpl implements DriverService {
             boolean archive = temp == 1 ? true : false;
             result.replace("archive", archive);
         }
+        return result;
+    }
+
+    @Override
+    public HashMap searchDriverBaseInfo(long driverId) {
+        HashMap result = driverDao.searchDriverBaseInfo(driverId);
+        JSONObject summary = JSONUtil.parseObj(MapUtil.getStr(result, "summary"));
+        result.replace("summary", summary);
         return result;
     }
 }
