@@ -15,4 +15,7 @@ public interface DriverService {
     HashMap login(LoginForm form);
 
     HashMap searchDriverBaseInfo(SearchDriverBaseInfoForm form);
+
+    HashMap searchWorkbenchData(long driverId);
+
 }

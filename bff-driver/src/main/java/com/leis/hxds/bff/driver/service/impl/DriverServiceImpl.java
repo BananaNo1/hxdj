@@ -5,6 +5,7 @@ import cn.hutool.core.map.MapUtil;
 import com.codingapi.txlcn.tc.annotation.LcnTransaction;
 import com.leis.hxds.bff.driver.controller.form.*;
 import com.leis.hxds.bff.driver.feign.DrServiceApi;
+import com.leis.hxds.bff.driver.feign.OdrServiceApi;
 import com.leis.hxds.bff.driver.service.DriverService;
 import com.leis.hxds.common.util.R;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,9 @@ public class DriverServiceImpl implements DriverService {
 
     @Resource
     private DrServiceApi drServiceApi;
+
+    @Resource
+    private OdrServiceApi odrServiceApi;
 
     @Override
     @Transactional
@@ -56,5 +60,23 @@ public class DriverServiceImpl implements DriverService {
         R r = drServiceApi.searchDriverBaseInfo(form);
         HashMap map = (HashMap) r.get("result");
         return map;
+    }
+
+    @Override
+    public HashMap searchWorkbenchData(long driverId) {
+        SearchDriverTodayBusinessDataForm form1 = new SearchDriverTodayBusinessDataForm();
+        form1.setDriverId(driverId);
+        R r = odrServiceApi.searchDriverTodayBusinessData(form1);
+        HashMap business = (HashMap) r.get("result");
+
+        SearchDriverSettingForm form2 = new SearchDriverSettingForm();
+        form2.setDriverId(driverId);
+        r = drServiceApi.searchDriverSetting(form2);
+        HashMap settings = (HashMap) r.get("result");
+        HashMap result = new HashMap() {{
+            put("business", business);
+            put("settings", settings);
+        }};
+        return result;
     }
 }

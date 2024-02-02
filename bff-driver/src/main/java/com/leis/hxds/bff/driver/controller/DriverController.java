@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import javax.websocket.OnError;
 import java.util.HashMap;
 
 @RestController
@@ -83,5 +84,14 @@ public class DriverController {
         form.setDriverId(driverId);
         HashMap map = driverService.searchDriverBaseInfo(form);
         return R.ok().put("result", map);
+    }
+
+    @PostMapping("/searchWorkBenchData")
+    @Operation(summary = "查询司机工作台数据")
+    @SaCheckLogin
+    public R searchWorkBenchData() {
+        long driverId = StpUtil.getLoginIdAsLong();
+        HashMap result = driverService.searchWorkbenchData(driverId);
+        return R.ok().put("result", result);
     }
 }
