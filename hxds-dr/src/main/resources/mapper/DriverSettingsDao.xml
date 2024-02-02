@@ -7,4 +7,10 @@
         insert into tb_driver_settings
         set settings = #{settings}
     </insert>
+
+    <select id="searchDriverSettings" parameterType="long" resultType="String">
+        select settings
+        from tb_driver_setting
+        where driver_id = #{driverId}
+    </select>
 </mapper>

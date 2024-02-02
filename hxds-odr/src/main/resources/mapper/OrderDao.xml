@@ -3,5 +3,13 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.leis.hxds.odr.db.dao.OrderDao">
-    
+    <select id="searchDriverTodayBusinessData" parameterType="long" resultType="HashMap">
+        select sum(timestampdiff(hour,end_time, start_time)) as duration,
+               sum(real_free)                                as income,
+               count(id)                                     as orders
+        from tb_order
+        where driver_id = #{driverId}
+          and `status` in (5, 6, 7, 8)
+          and date = current_date
+    </select>
 </mapper>
