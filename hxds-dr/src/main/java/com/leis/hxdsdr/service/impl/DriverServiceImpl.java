@@ -7,6 +7,7 @@ import cn.hutool.json.JSONUtil;
 import com.codingapi.txlcn.tc.annotation.LcnTransaction;
 import com.leis.hxds.common.exception.HxdsException;
 import com.leis.hxds.common.util.MicroAppUtil;
+import com.leis.hxds.common.util.PageUtils;
 import com.leis.hxdsdr.db.dao.DriverDao;
 import com.leis.hxdsdr.db.dao.DriverSettingsDao;
 import com.leis.hxdsdr.db.dao.WalletDao;
@@ -26,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -151,5 +153,20 @@ public class DriverServiceImpl implements DriverService {
         JSONObject summary = JSONUtil.parseObj(MapUtil.getStr(result, "summary"));
         result.replace("summary", summary);
         return result;
+    }
+
+    @Override
+    public PageUtils searchDriverByPage(Map param) {
+        long count = driverDao.searchDriverCount(param);
+        ArrayList<HashMap> list = null;
+        if (count == 0) {
+            list = new ArrayList<>();
+        } else {
+            list = driverDao.searchDriverByPage(param);
+        }
+        int start = (Integer) param.get("start");
+        int length = (Integer) param.get("length");
+        PageUtils pageUtils = new PageUtils(list, count, start, length);
+        return pageUtils;
     }
 }

@@ -87,4 +87,60 @@
                  join tb_wallet w on d.id = w.driver_id
         where d.id = #{driverId}
     </select>
+    <select id="searchDriverByPage" parameterType="Map" resultType="HashMap">
+        select cast(id as char) as id,
+        IFNULL(`name`, "") as `name`,
+        IFNULL(sex, "") as sex,
+        IFNULL(pid, "") as pid,
+        IFNULL(tel, "") as tel,
+        IFNULL(contact_name, "") as contactName,
+        IFNULL(contace_tel, "") as contactTel,
+        IFNULL(real_auth, "") as realAuth,
+        `status`,
+        DATE_FORMAT(create_time, '%Y-%m-%d') as createTime,
+        from tb_driver
+        where 1=1
+        <if test="name!=null">
+            and `name` = #{name}
+        </if>
+        <if test="tel!=null">
+            and tel = #{tel}
+        </if>
+        <if test="pid!=null">
+            and pid = #{pid}
+        </if>
+        <if test="sex!=null">
+            and sex = #{sex}
+        </if>
+        <if test="realAuth!=null">
+            and `real_auth` = #{realAuth}
+        </if>
+        <if test="status!=null">
+            and `status` = #{status}
+        </if>
+        limit #{tasrt},#{length}
+    </select>
+    <select id="searchDriverCount" parameterType="map" resultType="long">
+        select count(*)
+        from tb_driver
+        where 1=1
+        <if test="name!=null">
+            and `name` = #{name}
+        </if>
+        <if test="tel!=null">
+            and tel = #{tel}
+        </if>
+        <if test="pid!=null">
+            and pid =#{pid}
+        </if>
+        <if test="sex!=null">
+            and sex = #{sex}
+        </if>
+        <if test="realAuth!=null">
+            and `realAuth` =#{realAuth}
+        </if>
+        <if test="status!=null">
+            and `status` = #{status}
+        </if>
+    </select>
 </mapper>

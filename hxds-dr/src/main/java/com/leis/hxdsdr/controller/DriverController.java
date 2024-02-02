@@ -1,6 +1,7 @@
 package com.leis.hxdsdr.controller;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.leis.hxds.common.util.PageUtils;
 import com.leis.hxds.common.util.R;
 import com.leis.hxdsdr.controller.form.*;
 import com.leis.hxdsdr.service.DriverService;
@@ -59,5 +60,17 @@ public class DriverController {
     public R searchDriverBaseInfo(@RequestBody @Valid SearchDriverBaseInfoForm form) {
         HashMap result = driverService.searchDriverBaseInfo(form.getDriverId());
         return R.ok().put("result", result);
+    }
+
+    @PostMapping("/searchDriverByPage")
+    @Operation(summary = "查询司机分页记录")
+    public R searchDriverByPage(@RequestBody @Valid SearchDriverByPageForm form) {
+        Map param = BeanUtil.beanToMap(form);
+        int page = form.getPage();
+        int length = form.getLength();
+        int start = (page - 1) * length;
+        param.put("start", start);
+        PageUtils pageUtils = driverService.searchDriverByPage(param);
+        return R.ok().put("result", pageUtils);
     }
 }
