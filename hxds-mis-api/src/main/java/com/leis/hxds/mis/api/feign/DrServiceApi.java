@@ -5,7 +5,7 @@ import com.leis.hxds.mis.api.controller.form.SearchDriverByPageForm;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 
-@FeignClient(value = "hxds-api")
+@FeignClient(value = "hxds-dr")
 public interface DrServiceApi {
 
     @PostMapping("/driver/searchDriverByPage")

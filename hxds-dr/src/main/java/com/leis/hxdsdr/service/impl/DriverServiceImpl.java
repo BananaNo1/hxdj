@@ -169,4 +169,10 @@ public class DriverServiceImpl implements DriverService {
         PageUtils pageUtils = new PageUtils(list, count, start, length);
         return pageUtils;
     }
+
+    @Override
+    public HashMap searchDriverAuth(long driverId) {
+        HashMap map = driverDao.searchDriverAuth(driverId);
+        return map;
+    }
 }

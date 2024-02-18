@@ -143,4 +143,29 @@
             and `status` = #{status}
         </if>
     </select>
+    <select id="searchDriverAuth" parameterType="long" resultType="HashMap">
+        select IFNULL(`name`, '')            as `name`,
+               IFNULL(sex, '')               as sex,
+               IFNULL(pid, '')               as pid,
+               IFNULL(birthday, '')          as birthday,
+               IFNULL(tel, '')               as tel,
+               IFNULL(mail_address, '')      as mailAddress,
+               IFNULL(contact_name, '')      as contactName,
+               IFNULL(contact_tel, '')       as contactTel,
+               IFNULL(email, '')             as email,
+               IFNULL(real_auth, '')         as realAuth,
+               IFNULL(idcard_address, '')    as idcardAddress,
+               IFNULL(idcard_expiration, '') as idcardExpiration,
+               IFNULL(idcard_font, '')       as idcardFont,
+               IFNULL(idcard_back, '')       as idcardBack,
+               IFNULL(idcard_holding, '')    as idcardHolding,
+               IFNULL(drcard_type, '')       as drcardType,
+               IFNULL(drcard_expiration, '') as drcardExpiration,
+               IFNULL(drcard_issue_date, '') as drcardIssueDate,
+               IFNULL(drcard_front, '')      as drcardFront,
+               IFNULL(drcard_back, '')       as drcardBack,
+               IFNULL(drcard_holding, '')    as drcardHolding
+        from tb_driver
+        where id = #{driverId}
+    </select>
 </mapper>
