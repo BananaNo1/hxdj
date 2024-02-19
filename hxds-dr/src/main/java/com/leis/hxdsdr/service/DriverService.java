@@ -20,4 +20,6 @@ public interface DriverService {
     PageUtils searchDriverByPage(Map param);
 
     HashMap searchDriverAuth(long driverId);
+
+    HashMap searchDriverRealSummary(long driverId);
 }

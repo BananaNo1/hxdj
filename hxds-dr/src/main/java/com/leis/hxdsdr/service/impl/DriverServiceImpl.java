@@ -175,4 +175,10 @@ public class DriverServiceImpl implements DriverService {
         HashMap map = driverDao.searchDriverAuth(driverId);
         return map;
     }
+
+    @Override
+    public HashMap searchDriverRealSummary(long driverId) {
+        HashMap map = driverDao.searchDriverRealSummary(driverId);
+        return map;
+    }
 }

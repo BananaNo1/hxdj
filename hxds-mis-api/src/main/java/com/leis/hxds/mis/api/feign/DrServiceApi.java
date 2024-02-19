@@ -2,6 +2,7 @@ package com.leis.hxds.mis.api.feign;
 
 import com.leis.hxds.common.util.R;
 import com.leis.hxds.mis.api.controller.form.SearchDriverByPageForm;
+import com.leis.hxds.mis.api.controller.form.SearchDriverRealSummaryForm;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -9,6 +10,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 public interface DrServiceApi {
 
     @PostMapping("/driver/searchDriverByPage")
-    R SearchDriverByPage(SearchDriverByPageForm form);
+    R searchDriverByPage(SearchDriverByPageForm form);
+
+    @PostMapping("/driver/searchDriverRealSummary")
+    R searchDriverRealSummary(SearchDriverRealSummaryForm form);
 
 }

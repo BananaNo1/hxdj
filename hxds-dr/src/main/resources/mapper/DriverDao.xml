@@ -168,4 +168,19 @@
         from tb_driver
         where id = #{driverId}
     </select>
+    <select id="searchDriverRealSummary" parameterType="long" resultType="HashMap">
+        select timestampdiff(YEAR,drcard_issue_date, now()) as `year`,
+               birthday,
+               email,
+               mail_address                                 as mailAddress,
+               idcard_address                               as idcardAddress,
+               idcard_front                                 as idcardFront,
+               idcard_back                                  as idcardBack,
+               idcard_holding                               as idcardHolding,
+               drcard_front                                 as drcardFront,
+               drcard_back                                  as drcardBack,
+               drcard_holding                               as drcardHolding
+        from tb_driver
+        where id = #{driverId}
+    </select>
 </mapper>
