@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 
 @Data
 @Schema(description = "更新司机实名认证状态表单")
-public class UpdateRealAuthForm {
+public class UpdateDriverRealAuthForm {
 
     @NotNull(message = "driverId不能为空")
     @Min(value = 1, message = "driverId不能小于1")

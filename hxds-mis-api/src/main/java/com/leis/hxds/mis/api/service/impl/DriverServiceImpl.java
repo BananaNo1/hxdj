@@ -2,14 +2,17 @@ package com.leis.hxds.mis.api.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.map.MapUtil;
+import com.codingapi.txlcn.tc.annotation.LcnTransaction;
 import com.leis.hxds.common.util.CosUtil;
 import com.leis.hxds.common.util.PageUtils;
 import com.leis.hxds.common.util.R;
 import com.leis.hxds.mis.api.controller.form.SearchDriverByPageForm;
 import com.leis.hxds.mis.api.controller.form.SearchDriverRealSummaryForm;
+import com.leis.hxds.mis.api.controller.form.UpdateDriverRealAuthForm;
 import com.leis.hxds.mis.api.feign.DrServiceApi;
 import com.leis.hxds.mis.api.service.DriverService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
@@ -24,7 +27,7 @@ public class DriverServiceImpl implements DriverService {
     private CosUtil cosUtil;
 
     @Override
-    public PageUtils SearchDriverByPage(SearchDriverByPageForm form) {
+    public PageUtils searchDriverByPage(SearchDriverByPageForm form) {
         R r = drServiceApi.searchDriverByPage(form);
         HashMap map = (HashMap) r.get("result");
         PageUtils pageUtils = BeanUtil.toBean(map, PageUtils.class);
@@ -32,7 +35,7 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @Override
-    public HashMap SearchDriverComprehensiveData(byte realAuth, Long driverId) {
+    public HashMap searchDriverComprehensiveData(byte realAuth, Long driverId) {
         HashMap map = new HashMap();
         if (realAuth == 2 || realAuth == 3) {
             SearchDriverRealSummaryForm form_1 = new SearchDriverRealSummaryForm();
@@ -63,5 +66,15 @@ public class DriverServiceImpl implements DriverService {
         }
 
         return map;
+    }
+
+    @Override
+    @Transactional
+    @LcnTransaction
+    public int updateDriverRealAuth(UpdateDriverRealAuthForm form) {
+        R r = drServiceApi.updateDriverRealAuth(form);
+        int rows = MapUtil.getInt(r, "rows");
+        //todo
+        return rows;
     }
 }
