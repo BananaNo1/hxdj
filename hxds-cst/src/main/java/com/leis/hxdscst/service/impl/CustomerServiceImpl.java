@@ -16,6 +16,7 @@ import java.util.Map;
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
+
     @Resource
     private CustomerDao customerDao;
 
@@ -47,4 +48,6 @@ public class CustomerServiceImpl implements CustomerService {
         customerId = (customerId != null ? customerId : "");
         return customerId;
     }
+
+
 }
