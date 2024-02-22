@@ -38,7 +38,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     @Transactional
     @LcnTransaction
-    public int createNewOrder(CreateNewOrderForm form) {
+    public HashMap createNewOrder(CreateNewOrderForm form) {
         Long customerId = form.getCustomerId();
         String startPlace = form.getStartPlace();
         String startPlaceLatitude = form.getStartPlaceLatitude();
@@ -80,36 +80,6 @@ public class OrderServiceImpl implements OrderService {
         String exceedMinutePrice = MapUtil.getStr(map, "exceedMinutePrice");
         Short baseReturnMileage = MapUtil.getShort(map, "baseReturnMileage");
         String exceedReturnPrice = MapUtil.getStr(map, "exceedReturnPrice");
-
-        /**
-         * 生成订单记录
-         */
-        InsertOrderForm form4 = new InsertOrderForm();
-        form4.setUuid(IdUtil.simpleUUID());
-        form4.setCustomerId(customerId);
-        form4.setStartPlace(startPlace);
-        form4.setStartPlaceLatitude(startPlaceLatitude);
-        form4.setStartPlaceLongitude(startPlaceLongitude);
-        form4.setEndPlace(endPlace);
-        form4.setEndPlaceLatitude(endPlaceLatitude);
-        form4.setEndPlaceLongitude(endPlaceLongitude);
-        form4.setExpectsMileage(mileage);
-        form4.setExpectsFee(expectsFee);
-        form4.setDate(new DateTime().toTimeStr());
-        form4.setChargeRuleId(Long.parseLong(chargeRuled));
-        form4.setCarPlate(form.getCarPlate());
-        form4.setCarType(form.getCarType());
-        form4.setBaseMileage(baseMileage);
-        form4.setBaseMileagePrice(baseMileagePrice);
-        form4.setBaseMinute(baseMinute);
-        form4.setExceedMileagePrice(exceedMinutePrice);
-        form4.setBaseReturnMileage(baseReturnMileage);
-        form4.setExceedReturnPrice(exceedReturnPrice);
-
-        r = odrServiceApi.insertOrder(form4);
-        String orderId = MapUtil.getStr(r, "result");
-        //todo 发送通知给符合条件的司机抢单
-
         /**
          * 搜索适合接单的司机
          */
@@ -125,10 +95,39 @@ public class OrderServiceImpl implements OrderService {
             put("count", 0);
         }};
 
-        if(list.size()>0){
+        if (list.size() > 0) {
+            /**
+             * 生成订单记录
+             */
+            InsertOrderForm form4 = new InsertOrderForm();
+            form4.setUuid(IdUtil.simpleUUID());
+            form4.setCustomerId(customerId);
+            form4.setStartPlace(startPlace);
+            form4.setStartPlaceLatitude(startPlaceLatitude);
+            form4.setStartPlaceLongitude(startPlaceLongitude);
+            form4.setEndPlace(endPlace);
+            form4.setEndPlaceLatitude(endPlaceLatitude);
+            form4.setEndPlaceLongitude(endPlaceLongitude);
+            form4.setExpectsMileage(mileage);
+            form4.setExpectsFee(expectsFee);
+            form4.setDate(new DateTime().toTimeStr());
+            form4.setChargeRuleId(Long.parseLong(chargeRuled));
+            form4.setCarPlate(form.getCarPlate());
+            form4.setCarType(form.getCarType());
+            form4.setBaseMileage(baseMileage);
+            form4.setBaseMileagePrice(baseMileagePrice);
+            form4.setBaseMinute(baseMinute);
+            form4.setExceedMileagePrice(exceedMinutePrice);
+            form4.setBaseReturnMileage(baseReturnMileage);
+            form4.setExceedReturnPrice(exceedReturnPrice);
 
+            r = odrServiceApi.insertOrder(form4);
+            String orderId = MapUtil.getStr(r, "result");
+            //todo 发送通知给符合条件的司机抢单
+
+            result.put("orderId", orderId);
+            result.replace("count", orderId);
         }
-
-        return 0;
+        return result;
     }
 }
