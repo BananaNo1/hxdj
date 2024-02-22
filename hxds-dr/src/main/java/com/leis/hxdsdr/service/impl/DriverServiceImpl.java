@@ -181,4 +181,12 @@ public class DriverServiceImpl implements DriverService {
         HashMap map = driverDao.searchDriverRealSummary(driverId);
         return map;
     }
+
+    @Override
+    @Transactional
+    @LcnTransaction
+    public int updateDriverRealAuth(Map param) {
+        int rows = driverDao.updateDriverRealAuth(param);
+        return rows;
+    }
 }

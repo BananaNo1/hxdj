@@ -7,6 +7,7 @@ import java.util.Map;
 
 public interface OrderBillDao {
 
+    int insert(OrderBillEntity entity);
 }
 
 

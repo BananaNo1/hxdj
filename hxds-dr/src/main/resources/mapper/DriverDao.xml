@@ -183,4 +183,9 @@
         from tb_driver
         where id = #{driverId}
     </select>
+    <update id="updateDriverRealAuth" parameterType="Map">
+        update tb_driver
+        set real_auth = #{realAuth}
+        where id = #{driverId}
+    </update>
 </mapper>

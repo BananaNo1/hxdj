@@ -13,6 +13,8 @@ tencent:
     face:
       groupName: hxds
       region: ap-guangzhou
+  map:
+    key:
 
 wx:
   app-id: 你的微信小程序APPID
