@@ -8,6 +8,7 @@ import com.leis.hxds.bff.customer.controller.CreateNewOrderForm;
 import com.leis.hxds.bff.customer.controller.form.EstimateOrderChargeForm;
 import com.leis.hxds.bff.customer.controller.form.EstimateOrderMileageAndMinuteForm;
 import com.leis.hxds.bff.customer.controller.form.InsertOrderForm;
+import com.leis.hxds.bff.customer.controller.form.SearchBefittingDriverAboutOrderForm;
 import com.leis.hxds.bff.customer.feign.MpsServiceApi;
 import com.leis.hxds.bff.customer.feign.OdrServiceApi;
 import com.leis.hxds.bff.customer.feign.RuleServiceApi;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 @Service
@@ -107,6 +109,26 @@ public class OrderServiceImpl implements OrderService {
         r = odrServiceApi.insertOrder(form4);
         String orderId = MapUtil.getStr(r, "result");
         //todo 发送通知给符合条件的司机抢单
+
+        /**
+         * 搜索适合接单的司机
+         */
+        SearchBefittingDriverAboutOrderForm form3 = new SearchBefittingDriverAboutOrderForm();
+        form3.setStartPlaceLatitude(startPlaceLatitude);
+        form3.setStartPlaceLongitude(startPlaceLongitude);
+        form3.setEndPlaceLatitude(endPlaceLatitude);
+        form3.setEndPlaceLongitude(endPlaceLongitude);
+        form3.setMileage(mileage);
+        r = mpsServiceApi.searchBefittingDriverAboutOrder(form3);
+        ArrayList<HashMap> list = (ArrayList<HashMap>) r.get("result");
+        HashMap result = new HashMap() {{
+            put("count", 0);
+        }};
+
+        if(list.size()>0){
+
+        }
+
         return 0;
     }
 }
