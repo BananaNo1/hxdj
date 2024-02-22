@@ -14,25 +14,27 @@ spring:
   application:
     name: bff-driver
   cloud:
+    inetutils:
+      preferred-networks: 127.0.0.1
     nacos:
-  #    config:
-  #      group: DEFAULT_GROUP
-  #      file-extension: yaml
-  #      server-addr: 192.168.241.131:8848
-  #      prefix: ${spring.application.name}
-  #      namespace: hxds
+      config:
+        group: DEFAULT_GROUP
+        file-extension: yaml
+        server-addr: 127.0.0.1:8848
+        prefix: ${spring.application.name}
+        namespace: hxds
       discovery:
-  #      namespace: hxds
-  #      username: nacos
-  #      password: nacos
-        server-addr: 192.168.241.131:8848
-  #      heart-beat-interval: 1000
-  #      heart-beat-timeout: 1000
-  #      group: DEFAULT_GROUP
+        namespace: hxds
+        username: nacos
+        password: nacos
+        server-addr: 127.0.0.1:8848
+        heart-beat-interval: 1000
+        heart-beat-timeout: 1000
+        group: DEFAULT_GROUP
 
   redis:
     database: 3
-    host: 192.168.241.131
+    host: 127.0.0.1
     port: 6379
     password: abc123456
     jedis:

@@ -35,13 +35,13 @@ import java.util.Map;
 @Slf4j
 public class DriverServiceImpl implements DriverService {
 
-    @Value("${tencent.cloud.secreId}")
+    @Value("${tencent.cloud.secretId}")
     private String secretId;
-    @Value("${tecent.cloud.secretKey}")
+    @Value("${tencent.cloud.secretKey}")
     private String secretKey;
-    @Value("${tecent.cloud.face.groupName}")
+    @Value("${tencent.cloud.face.groupName}")
     private String groupName;
-    @Value("${tecent.cloud.face.region}")
+    @Value("${tencent.cloud.face.region}")
     private String region;
     @Autowired
     private MicroAppUtil microAppUtil;

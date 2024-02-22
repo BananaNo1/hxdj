@@ -16,13 +16,13 @@ spring:
   cloud:
     inetutils:
       #??????Nacos??IP??
-      preferred-networks: 192.168.241.131
+      preferred-networks: 127.0.0.1
     nacos:
       #??????web??????????
       config:
         group: DEFAULT_GROUP
         file-extension: yaml
-        server-addr: 192.168.241.131:8848
+        server-addr: 127.0.0.1:8848
         prefix: ${spring.application.name}
         namespace: hxds
       discovery:
@@ -30,7 +30,7 @@ spring:
         namespace: hxds
         username: nacos
         password: nacos
-        server-addr: 192.168.241.131:8848
+        server-addr: 127.0.0.1:8848
         heart-beat-interval: 1000
         heart-beat-timeout: 1000
         group: DEFAULT_GROUP
@@ -39,7 +39,7 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://192.168.241.131:3307/hxds?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
+      url: jdbc:mysql://127.0.0.1:3307/hxds?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
       username: root
       password: abc123456
       initial-size: 4

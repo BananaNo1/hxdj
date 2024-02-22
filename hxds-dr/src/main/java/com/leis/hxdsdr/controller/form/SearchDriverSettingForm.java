@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 @Schema(description = "查询司机设备的表单")
 public class SearchDriverSettingForm {
 
-    @NotNull(message = "driverId不能为空")s
+    @NotNull(message = "driverId不能为空")
     @Min(value = 1, message = "driverId不能小于1")
     @Schema(description = "司机ID")
     private Long driverId;

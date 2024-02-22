@@ -156,7 +156,7 @@ docker run -it -d --name mongo \
 	--net mynet --ip 172.18.0.8 \
 	-v /root/mongo:/etc/mongo \
 	-v /root/mongo/data/db:/data/db \
-	-v 400m --privileged=true \
+	-m 400m --privileged=true \
 	-e MONGO_INITDB_ROOT_USERNAME=admin \
 	-e MONGO_INITDB_ROOT_PASSWORD=abc123456 \
 	-e TZ=Asia\Shanghai \
@@ -230,7 +230,7 @@ docker run -it -d --name mq \
 ## 安装
 
 ```shell
-docker run -it -d -p 8848:8848 -env MODE=standalone \
+docker run -it -d -p 8848:8848 --env MODE=standalone \
 --net mynet --ip 172.18.0.12 -e TZ=Asia/Shanghai \
 --name nacos nacos/nacos-server
 ```
