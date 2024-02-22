@@ -1,4 +1,4 @@
-package com.leis.hxds.bff.driver.service;
+package com.leis.hxds.bff.customer.service;
 
 import com.leis.hxds.bff.driver.controller.form.DeleteCustomerCarByIdForm;
 import com.leis.hxds.bff.driver.controller.form.InsertCustomerCarForm;

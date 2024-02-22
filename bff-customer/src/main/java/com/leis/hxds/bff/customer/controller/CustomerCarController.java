@@ -1,4 +1,4 @@
-package com.leis.hxds.bff.driver.controller;
+package com.leis.hxds.bff.customer.controller;
 
 
 import cn.dev33.satoken.stp.StpUtil;

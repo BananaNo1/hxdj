@@ -12,4 +12,16 @@
           and `status` in (5, 6, 7, 8)
           and date = current_date
     </select>
+
+
+    <insert id="insert" parameterType="com.leis.hxds.odr.db.pojo.OrderEntity">
+        insert into tb_order
+        set uuid = #{uuid}, customer_id = #{customerId}, start_place = #{startPlace}, start_place_location = #{startPlaceLocation}, end_place = #{endPlace}, end_place_location = #{endPlaceLoaction}, expects_mileage = #{expectsMileage}, expects_fee= #{expectsFee}, favour_fee = #{favourFee}, charge_rule_id = #{chargeRuleId}, car_place = #{carPlace}, car_type = #{carType}, date = #{date}
+    </insert>
+
+    <select id="searchOrderIdByUUID" parameterType="String" resultType="String">
+        select cast(id as char) as id
+        from tb_order
+        where uuid = #{uuid}
+    </select>
 </mapper>
