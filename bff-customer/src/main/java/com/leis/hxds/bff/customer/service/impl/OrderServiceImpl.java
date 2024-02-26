@@ -116,8 +116,9 @@ public class OrderServiceImpl implements OrderService {
             form4.setCarType(form.getCarType());
             form4.setBaseMileage(baseMileage);
             form4.setBaseMileagePrice(baseMileagePrice);
+            form4.setExceedMileagePrice(exceedMileagePrice);
             form4.setBaseMinute(baseMinute);
-            form4.setExceedMileagePrice(exceedMinutePrice);
+            form4.setExceedMinutePrice(exceedMinutePrice);
             form4.setBaseReturnMileage(baseReturnMileage);
             form4.setExceedReturnPrice(exceedReturnPrice);
 
