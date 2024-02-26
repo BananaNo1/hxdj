@@ -4,7 +4,9 @@ import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.map.MapUtil;
 import com.leis.hxds.bff.driver.controller.form.*;
+import com.leis.hxds.bff.driver.service.DriverLocationService;
 import com.leis.hxds.bff.driver.service.DriverService;
+import com.leis.hxds.bff.driver.service.NewOrderMessageService;
 import com.leis.hxds.common.util.R;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -22,6 +24,12 @@ public class DriverController {
 
     @Resource
     private DriverService driverService;
+
+    @Resource
+    private DriverLocationService locationService;
+
+    @Resource
+    private NewOrderMessageService newOrderMessageService;
 
     @PostMapping("/registerNewDriver")
     @Operation(summary = "新司机注册")
@@ -105,5 +113,38 @@ public class DriverController {
         HashMap map = driverService.searchDriverAuth(form);
         return R.ok().put("result", map);
     }
+
+    @PostMapping("/startWork")
+    @Operation(summary = "开始接单")
+    @SaCheckLogin
+    public R startWork() {
+        long driverId = StpUtil.getLoginIdAsLong();
+
+        RemoveLocationCacheForm form1 = new RemoveLocationCacheForm();
+        form1.setDriverId(driverId);
+        locationService.removeLocationCache(form1);
+
+        ClearNewOrderQueueForm form2 = new ClearNewOrderQueueForm();
+        form2.setUserId(driverId);
+        newOrderMessageService.clearNewOrderQueue(form2);
+        return R.ok();
+    }
+
+    @PostMapping("/stopWork")
+    @Operation(summary = "停止接单")
+    @SaCheckLogin
+    public R stopWork() {
+        long driverId = StpUtil.getLoginIdAsLong();
+
+        RemoveLocationCacheForm form1 = new RemoveLocationCacheForm();
+        form1.setDriverId(driverId);
+        locationService.removeLocationCache(form1);
+
+        ClearNewOrderQueueForm form2 = new ClearNewOrderQueueForm();
+        form2.setUserId(driverId);
+        newOrderMessageService.clearNewOrderQueue(form2);
+        return R.ok();
+    }
+
 
 }
