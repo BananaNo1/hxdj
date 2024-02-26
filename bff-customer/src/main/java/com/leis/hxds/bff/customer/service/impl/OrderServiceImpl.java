@@ -5,13 +5,11 @@ import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.IdUtil;
 import com.codingapi.txlcn.tc.annotation.LcnTransaction;
 import com.leis.hxds.bff.customer.controller.CreateNewOrderForm;
-import com.leis.hxds.bff.customer.controller.form.EstimateOrderChargeForm;
-import com.leis.hxds.bff.customer.controller.form.EstimateOrderMileageAndMinuteForm;
-import com.leis.hxds.bff.customer.controller.form.InsertOrderForm;
-import com.leis.hxds.bff.customer.controller.form.SearchBefittingDriverAboutOrderForm;
+import com.leis.hxds.bff.customer.controller.form.*;
 import com.leis.hxds.bff.customer.feign.MpsServiceApi;
 import com.leis.hxds.bff.customer.feign.OdrServiceApi;
 import com.leis.hxds.bff.customer.feign.RuleServiceApi;
+import com.leis.hxds.bff.customer.feign.SnmServiceApi;
 import com.leis.hxds.bff.customer.service.OrderService;
 import com.leis.hxds.common.util.R;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -34,6 +34,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Resource
     private OdrServiceApi odrServiceApi;
+
+    @Resource
+    private SnmServiceApi snmServiceApi;
 
     @Override
     @Transactional
@@ -125,6 +128,27 @@ public class OrderServiceImpl implements OrderService {
             r = odrServiceApi.insertOrder(form4);
             String orderId = MapUtil.getStr(r, "result");
             //todo 发送通知给符合条件的司机抢单
+
+            SendNewOrderMessageForm form5 = new SendNewOrderMessageForm();
+            String[] driverContent = new String[list.size()];
+            for (int i = 0; i < list.size(); i++) {
+                HashMap one = list.get(i);
+                String driverId = MapUtil.getStr(one, "driverId");
+                String distance = MapUtil.getStr(one, "distance");
+                distance = new BigDecimal(distance).setScale(1, RoundingMode.CEILING).toString();
+                driverContent[i] = driverId + "#" + distance;
+            }
+            form5.setDriversContent(driverContent);
+            form5.setOrderId(Long.parseLong(orderId));
+            form5.setFrom(startPlace);
+            form5.setTo(endPlace);
+            form5.setExpectsFee(expectsFee);
+
+            mileage = new BigDecimal(mileage).setScale(1, RoundingMode.CEILING).toString();
+            form5.setMileage(mileage);
+            form5.setMinute(minute);
+            form5.setFavourFee(favourFee);
+            snmServiceApi.sendNewOrderMessageAsync(form5);
 
             result.put("orderId", orderId);
             result.replace("count", orderId);
