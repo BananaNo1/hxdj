@@ -2,6 +2,7 @@ package com.leis.hxds.odr.controller;
 
 import cn.hutool.json.JSONObject;
 import com.leis.hxds.common.util.R;
+import com.leis.hxds.odr.controller.form.AcceptNewOrderForm;
 import com.leis.hxds.odr.controller.form.InsertOrderForm;
 import com.leis.hxds.odr.controller.form.SearchDriverTodayBusinessDataForm;
 import com.leis.hxds.odr.db.pojo.OrderBillEntity;
@@ -33,7 +34,6 @@ public class OrderController {
         HashMap result = orderService.searchDriverTodayBusinessData(form.getDriverId());
         return R.ok().put("result", result);
     }
-
 
     @PostMapping("/insertOrder")
     @Operation(summary = "顾客下单")
@@ -71,4 +71,12 @@ public class OrderController {
         String id = orderService.insertOrder(orderEntity, orderBillEntity);
         return R.ok().put("result", id);
     }
+
+    @PostMapping("/acceptNewOrder")
+    @Operation(summary = "司机接单")
+    public R acceptNewOrder(@RequestBody @Valid AcceptNewOrderForm form) {
+        String result = orderService.acceptNewOrder(form.getDriverId(), form.getOrderId());
+        return R.ok().put("result", result);
+    }
+
 }

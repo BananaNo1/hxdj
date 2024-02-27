@@ -13,6 +13,8 @@ public interface OrderDao {
     int insert(OrderEntity entity);
 
     String searchOrderIdByUUID(String uuid);
+
+    int acceptNewOrder(Map param);
 }
 
 

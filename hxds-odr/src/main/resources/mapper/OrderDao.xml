@@ -24,4 +24,12 @@
         from tb_order
         where uuid = #{uuid}
     </select>
+
+    <update id="acceptNewOrder" parameterType="Map">
+        update tb_order
+        set driver_id   = #{driverId},
+            accept_time = now(),
+            `status=2`
+        where id = #{orderId}
+    </update>
 </mapper>
