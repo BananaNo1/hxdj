@@ -15,6 +15,12 @@ public interface OrderDao {
     String searchOrderIdByUUID(String uuid);
 
     int acceptNewOrder(Map param);
+
+    HashMap searchDriverExecutorOrder(Map param);
+
+    Integer searchOrderStatus(Map param);
+
+    int deleteAcceptOrder(Map param);
 }
 
 

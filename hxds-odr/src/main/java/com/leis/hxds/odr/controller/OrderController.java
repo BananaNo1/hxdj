@@ -1,10 +1,9 @@
 package com.leis.hxds.odr.controller;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.json.JSONObject;
 import com.leis.hxds.common.util.R;
-import com.leis.hxds.odr.controller.form.AcceptNewOrderForm;
-import com.leis.hxds.odr.controller.form.InsertOrderForm;
-import com.leis.hxds.odr.controller.form.SearchDriverTodayBusinessDataForm;
+import com.leis.hxds.odr.controller.form.*;
 import com.leis.hxds.odr.db.pojo.OrderBillEntity;
 import com.leis.hxds.odr.db.pojo.OrderEntity;
 import com.leis.hxds.odr.service.OrderService;
@@ -19,6 +18,7 @@ import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/order")
@@ -76,6 +76,30 @@ public class OrderController {
     @Operation(summary = "司机接单")
     public R acceptNewOrder(@RequestBody @Valid AcceptNewOrderForm form) {
         String result = orderService.acceptNewOrder(form.getDriverId(), form.getOrderId());
+        return R.ok().put("result", result);
+    }
+
+    @PostMapping("/searchDriverExecuteOrder")
+    @Operation(summary = "查询司机正在执行的订单记录")
+    public R searchDriverExecuteOrder(@RequestBody @Valid SearchDriverExecuteOrderForm form) {
+        Map param = BeanUtil.beanToMap(form);
+        HashMap map = orderService.searchDriverExecutorOrder(param);
+        return R.ok().put("result", map);
+    }
+
+    @PostMapping("/searchOrderStatus")
+    @Operation(summary = "查询订单状态")
+    public R searchOrderStatus(@RequestBody @Valid SearchOrderStatusForm form) {
+        Map param = BeanUtil.beanToMap(form);
+        Integer status = orderService.searchOrderStatus(param);
+        return R.ok().put("result", status);
+    }
+
+    @PostMapping("/deleteUnAcceptOrder")
+    @Operation(summary = "删除没有司机接单的订单")
+    public R deleteUnAcceptOrder(@RequestBody @Valid DeleteUnAcceptOrderForm form) {
+        Map param = BeanUtil.beanToMap(form);
+        String result = orderService.deleteAcceptOrder(param);
         return R.ok().put("result", result);
     }
 

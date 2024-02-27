@@ -31,4 +31,12 @@
         where `status`!=2 and open_id =#{openId}
     </select>
 
+    <select id="searchCustomerInfoInOrder" parameterType="long" resultType="HashMap">
+        select IF(sex = '男', '先生', '女士') as title,
+               tel,
+               photo
+        from tb_customer
+        where id = #{customerId}
+    </select>
+
 </mapper>

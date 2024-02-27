@@ -13,7 +13,6 @@
           and date = current_date
     </select>
 
-
     <insert id="insert" parameterType="com.leis.hxds.odr.db.pojo.OrderEntity">
         insert into tb_order
         set uuid = #{uuid}, customer_id = #{customerId}, start_place = #{startPlace}, start_place_location = #{startPlaceLocation}, end_place = #{endPlace}, end_place_location = #{endPlaceLoaction}, expects_mileage = #{expectsMileage}, expects_fee= #{expectsFee}, favour_fee = #{favourFee}, charge_rule_id = #{chargeRuleId}, car_place = #{carPlace}, car_type = #{carType}, date = #{date}
@@ -32,4 +31,43 @@
             `status=2`
         where id = #{orderId}
     </update>
+
+    <select id="searchDriverExecutorOrder" parameterType="Map" resultType="HashMap">
+        select cast(id as char)                              as id,
+               customer_id                                   as customerId,
+               start_place                                   as startPlace,
+               start_place_location                          as startPlaceLocation,
+               end_place                                     as endPlace,
+               end_place_location                            as endPlaceLocation,
+               cast(favour_fee as char)                      as favourFee,
+               car_plate                                     as carPlate,
+               car_type                                      as carType,
+               DATE_FORMAT(create_time, '%Y-%m-%d %H:%i:%s') as createTime
+        from tb_order
+        where id = #{orderId}
+          and driver_id = #{driverId}
+    </select>
+
+    <select id="searchOrderStatus" parameterType="Map" resultType="Integer">
+        select status
+        from tb_order
+        where id =#{orderId}
+        <if test="driverId!=null">
+            and driver_id = #{driverId}
+        </if>
+        <if test="customerId!=null">
+            and customer_id = #{customerId}
+        </if>
+    </select>
+
+    <delete id="deleteAcceptOrder" parameterType="Map">
+        delete from tb_order
+        where id =#{orderId}
+        <if test="driverId!=null">
+            and driver_id = #{driverId}
+        </if>
+        <if test="customerId!=null">
+            and customer_id =#{customerId}
+        </if>
+    </delete>
 </mapper>

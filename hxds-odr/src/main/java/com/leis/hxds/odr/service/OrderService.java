@@ -4,6 +4,7 @@ import com.leis.hxds.odr.db.pojo.OrderBillEntity;
 import com.leis.hxds.odr.db.pojo.OrderEntity;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public interface OrderService {
 
@@ -12,4 +13,10 @@ public interface OrderService {
     String insertOrder(OrderEntity orderEntity, OrderBillEntity orderBillEntity);
 
     String acceptNewOrder(long driverId, long orderId);
+
+    HashMap searchDriverExecutorOrder(Map param);
+
+    Integer searchOrderStatus(Map param);
+
+    String deleteAcceptOrder(Map param);
 }
