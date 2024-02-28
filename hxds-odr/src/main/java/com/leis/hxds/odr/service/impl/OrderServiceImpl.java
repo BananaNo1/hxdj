@@ -112,7 +112,8 @@ public class OrderServiceImpl implements OrderService {
     public Integer searchOrderStatus(Map param) {
         Integer status = orderDao.searchOrderStatus(param);
         if (status == null) {
-            throw new HxdsException("没有查询到数据，请核对查询条件");
+            // throw new HxdsException("没有查询到数据，请核对查询条件");
+            status = 0;
         }
         return status;
     }
@@ -139,6 +140,28 @@ public class OrderServiceImpl implements OrderService {
         if (rows != 1) {
             return "订单取消失败";
         }
+        rows = orderBillDao.deleteUnAcceptOrderBill(orderId);
+        if (rows != 1) {
+            return "账单取消失败";
+        }
         return "订单取消成功";
+    }
+
+    @Override
+    public HashMap searchDriverCurrentOrder(long driverId) {
+        HashMap map = orderDao.searchDriverCurrentOrder(driverId);
+        return map;
+    }
+
+    @Override
+    public HashMap hasCustomerCurrentOrder(long customerId) {
+        HashMap result = new HashMap();
+        HashMap map = orderDao.hashCustomerUnAcceptOrder(customerId);
+        result.put("hasCustomerUnAcceptOrder", map != null);
+        result.put("unAcceptOrder", map);
+        Long id = orderDao.hashCustomerUnFinishedOrder(customerId);
+        result.put("hasCustomerUnFinishedOrder", id != null);
+        result.put("unFinishedOrder", id);
+        return result;
     }
 }

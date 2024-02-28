@@ -70,4 +70,41 @@
             and customer_id =#{customerId}
         </if>
     </delete>
+
+    <select id="searchDriverCurrentOrder" parameterType="long" resultType="HashMap">
+        select cast(id as char)                              as id,
+               customer_id                                   as customerId,
+               start_place                                   as startPlace,
+               start_place_location                          as startPlaceLocation,
+               end_place                                     as endPlace,
+               end_place_location                            as endPlaceLocation,
+               cast(favour_fee as char)                      as favourFee,
+               car_plate                                     as carPlate,
+               car_type                                      as carType,
+               DATE_FORMAT(create_time, '%Y-%m-%d %H:%i:%s') as createTime,
+               `status`
+        from tb_order
+        where driver_id = #{driverId}
+          and `status` in (2, 3, 4) limit 1
+    </select>
+
+    <select id="hashCustomerUnFinishedOrder" parameterType="long" resultType="long">
+        select cast(id as char) as id
+        from tb_order
+        where customer_id = #{customerId}
+          and `status` in (2, 3, 4) limit 1;
+    </select>
+
+    <select id="hashCustomerUnAcceptOrder" parameterType="long" resultType="HashMap">
+        select cast(id as char)     as id,
+               start_place          as startPlace,
+               start_place_location as startPlaceLocation,
+               end_place            as endPlace,
+               end_place_location   as endPlaceLocation,
+               car_plate            as carPlate,
+               car_type             as carType
+        from tb_order
+        where customer_id = #{customerId}
+          and `status` = 1 limit 1;
+    </select>
 </mapper>

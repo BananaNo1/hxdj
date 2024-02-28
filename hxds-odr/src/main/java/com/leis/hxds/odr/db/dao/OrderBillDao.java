@@ -8,6 +8,8 @@ import java.util.Map;
 public interface OrderBillDao {
 
     int insert(OrderBillEntity entity);
+
+    int deleteUnAcceptOrderBill(long orderId);
 }
 
 

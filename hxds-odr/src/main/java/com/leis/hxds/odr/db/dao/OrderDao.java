@@ -21,6 +21,12 @@ public interface OrderDao {
     Integer searchOrderStatus(Map param);
 
     int deleteAcceptOrder(Map param);
+
+    HashMap searchDriverCurrentOrder(long driverId);
+
+    Long hashCustomerUnFinishedOrder(long customerId);
+
+    HashMap hashCustomerUnAcceptOrder(long customerId);
 }
 
 
