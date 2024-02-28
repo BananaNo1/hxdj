@@ -1,6 +1,7 @@
 package com.leis.hxds.bff.customer.feign;
 
 import com.leis.hxds.bff.customer.controller.form.DeleteUnAcceptOrderForm;
+import com.leis.hxds.bff.customer.controller.form.HasCustomerCurrentOrderForm;
 import com.leis.hxds.bff.customer.controller.form.InsertOrderForm;
 import com.leis.hxds.bff.customer.controller.form.SearchOrderStatusForm;
 import com.leis.hxds.common.util.R;
@@ -14,7 +15,10 @@ public interface OdrServiceApi {
 
     @PostMapping("/order/searchOrderStatus")
     R searchOrderStatus(SearchOrderStatusForm form);
-    
+
     @PostMapping("/order/deleteUnAcceptOrder")
     R deleteUnAcceptOrder(DeleteUnAcceptOrderForm form);
+
+    @PostMapping("/order/hasCustomerCurrentOrder")
+    R hasCustomerCurrentOrder(HasCustomerCurrentOrderForm form);
 }

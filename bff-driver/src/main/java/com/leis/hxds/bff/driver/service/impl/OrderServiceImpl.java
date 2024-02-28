@@ -1,10 +1,7 @@
 package com.leis.hxds.bff.driver.service.impl;
 
 import cn.hutool.core.map.MapUtil;
-import com.leis.hxds.bff.driver.controller.form.AcceptNewOrderForm;
-import com.leis.hxds.bff.driver.controller.form.SearchCustomerInfoInOrderForm;
-import com.leis.hxds.bff.driver.controller.form.SearchDriverCurrentOrderForm;
-import com.leis.hxds.bff.driver.controller.form.SearchDriverExecuteOrderForm;
+import com.leis.hxds.bff.driver.controller.form.*;
 import com.leis.hxds.bff.driver.feign.CstServiceApi;
 import com.leis.hxds.bff.driver.feign.OdrServiceApi;
 import com.leis.hxds.bff.driver.service.OrderService;
@@ -67,5 +64,12 @@ public class OrderServiceImpl implements OrderService {
         } else {
             return null;
         }
+    }
+
+    @Override
+    public HashMap searchOrderForMoveById(SearchOrderForMoveByIdForm form) {
+        R r = odrServiceApi.searchOrderForMoveById(form);
+        HashMap map = (HashMap) r.get("result");
+        return map;
     }
 }

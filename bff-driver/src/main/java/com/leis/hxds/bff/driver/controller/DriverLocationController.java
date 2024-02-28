@@ -4,6 +4,7 @@ package com.leis.hxds.bff.driver.controller;
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.stp.StpUtil;
 import com.leis.hxds.bff.driver.controller.form.UpdateLocationCacheForm;
+import com.leis.hxds.bff.driver.controller.form.UpdateOrderLocationCacheForm;
 import com.leis.hxds.bff.driver.service.DriverLocationService;
 import com.leis.hxds.common.util.R;
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,4 +35,11 @@ public class DriverLocationController {
         return R.ok();
     }
 
+    @PostMapping("/updateOrderLocationCache")
+    @Operation(summary = "更新订单定位缓存")
+    @SaCheckLogin
+    public R updateOrderLocationCache(@RequestBody @Valid UpdateOrderLocationCacheForm form) {
+        driverLocationService.updateOrderLocationCache(form);
+        return R.ok();
+    }
 }

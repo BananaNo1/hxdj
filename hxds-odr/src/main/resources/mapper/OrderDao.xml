@@ -107,4 +107,22 @@
         where customer_id = #{customerId}
           and `status` = 1 limit 1;
     </select>
+
+    <select id="searchOrderForMoveById" parameterType="map" resultType="HashMap">
+        select
+        start_place as startPlace,
+        start_place_location as startPlaceLocation,
+        end_place as endPlace,
+        end_place_location as endPlaceLocation,
+        `status`
+        from tb_order
+        where id=#{orderId}
+        <if test="customerId!=null">
+            and customer_id = #{customerId}
+        </if>
+        <if test="driverId!=null">
+            and driver_id = #{driverId}
+        </if>
+        limit 1;
+    </select>
 </mapper>

@@ -1,6 +1,7 @@
 package com.leis.hxds.mps.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public interface DriverLocationService {
@@ -10,4 +11,8 @@ public interface DriverLocationService {
 
     ArrayList searchBefittingDriverAboutOrder(double startPlaceLatitude, double startPlaceLongitude,
                                               double endPlaceLatitude, double endPlaceLongitude, double mileage);
+
+    void updateOrderLocationCache(Map param);
+
+    HashMap searchOrderLocationCache(long orderId);
 }
