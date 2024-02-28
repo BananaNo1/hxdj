@@ -170,4 +170,18 @@ public class OrderServiceImpl implements OrderService {
         HashMap map = orderDao.searchOrderForMoveById(param);
         return map;
     }
+
+    @Override
+    @Transactional
+    @LcnTransaction
+    public int arriveStartPlate(Map param) {
+        //添加到达上车点标志位
+        Long orderId = MapUtil.getLong(param, "orderId");
+        redisTemplate.opsForValue().set("order_driver_arrived#" + orderId, 1);
+        int rows = orderDao.updateOrderStatus(param);
+        if (rows != 1) {
+            throw new HxdsException("更新订单状态失败");
+        }
+        return rows;
+    }
 }

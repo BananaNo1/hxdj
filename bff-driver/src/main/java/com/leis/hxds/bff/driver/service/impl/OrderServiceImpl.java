@@ -1,12 +1,14 @@
 package com.leis.hxds.bff.driver.service.impl;
 
 import cn.hutool.core.map.MapUtil;
+import com.codingapi.txlcn.tc.annotation.LcnTransaction;
 import com.leis.hxds.bff.driver.controller.form.*;
 import com.leis.hxds.bff.driver.feign.CstServiceApi;
 import com.leis.hxds.bff.driver.feign.OdrServiceApi;
 import com.leis.hxds.bff.driver.service.OrderService;
 import com.leis.hxds.common.util.R;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
@@ -71,5 +73,17 @@ public class OrderServiceImpl implements OrderService {
         R r = odrServiceApi.searchOrderForMoveById(form);
         HashMap map = (HashMap) r.get("result");
         return map;
+    }
+
+    @Override
+    @LcnTransaction
+    @Transactional
+    public int arriveStartPlace(ArriveStartPlaceForm form) {
+        R r = odrServiceApi.arriveStartPlace(form);
+        int rows = MapUtil.getInt(r, "rows");
+        if (rows == 1) {
+            //todo 发送通知消息
+        }
+        return rows;
     }
 }

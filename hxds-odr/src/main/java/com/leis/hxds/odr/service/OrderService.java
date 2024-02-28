@@ -25,4 +25,6 @@ public interface OrderService {
     HashMap hasCustomerCurrentOrder(long customerId);
 
     HashMap searchOrderForMoveById(Map param);
+
+    int arriveStartPlate(Map param);
 }

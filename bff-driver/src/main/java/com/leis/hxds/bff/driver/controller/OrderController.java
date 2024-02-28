@@ -3,10 +3,8 @@ package com.leis.hxds.bff.driver.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.stp.StpUtil;
-import com.leis.hxds.bff.driver.controller.form.AcceptNewOrderForm;
-import com.leis.hxds.bff.driver.controller.form.SearchDriverCurrentOrderForm;
-import com.leis.hxds.bff.driver.controller.form.SearchDriverExecuteOrderForm;
-import com.leis.hxds.bff.driver.controller.form.SearchOrderForMoveByIdForm;
+import cn.hutool.core.bean.BeanUtil;
+import com.leis.hxds.bff.driver.controller.form.*;
 import com.leis.hxds.bff.driver.service.OrderService;
 import com.leis.hxds.common.util.R;
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/order")
@@ -67,5 +66,14 @@ public class OrderController {
         form.setDriverId(driverId);
         HashMap map = orderService.searchOrderForMoveById(form);
         return R.ok().put("result", map);
+    }
+
+    @PostMapping("/arriveStartPlace")
+    @Operation(summary = "司机到达上车点")
+    public R arriveStartPlace(@RequestBody @Valid ArriveStartPlaceForm form) {
+        long driverId = StpUtil.getLoginIdAsLong();
+        form.setDriverId(driverId);
+        int rows = orderService.arriveStartPlace(form);
+        return R.ok().put("rows", rows);
     }
 }

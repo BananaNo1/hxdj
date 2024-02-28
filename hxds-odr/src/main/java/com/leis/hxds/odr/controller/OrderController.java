@@ -119,10 +119,19 @@ public class OrderController {
 
     @PostMapping("/searchOrderForMoveById")
     @Operation(summary = "查询订单信息用于司乘同显功能")
-    R searchOrderForMoveById(@RequestBody @Valid SearchOrderForMoveByIdForm form) {
+    public R searchOrderForMoveById(@RequestBody @Valid SearchOrderForMoveByIdForm form) {
         Map param = BeanUtil.beanToMap(form);
         HashMap map = orderService.searchOrderForMoveById(param);
         return R.ok().put("result", map);
+    }
+
+    @PostMapping("/arriveStartPlace")
+    @Operation(summary = "司机到达上车点")
+    public R arriveStartPlace(@RequestBody @Valid ArriveStartPlaceForm form) {
+        Map param = BeanUtil.beanToMap(form);
+        param.put("status", 3);
+        int rows = orderService.arriveStartPlate(param);
+        return R.ok().put("rows", rows);
     }
 
 }

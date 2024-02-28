@@ -29,6 +29,8 @@ public interface OrderDao {
     HashMap hashCustomerUnAcceptOrder(long customerId);
 
     HashMap searchOrderForMoveById(Map param);
+
+    int updateOrderStatus(Map param);
 }
 
 
