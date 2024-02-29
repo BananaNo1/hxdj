@@ -76,4 +76,14 @@ public class OrderController {
         int rows = orderService.arriveStartPlace(form);
         return R.ok().put("rows", rows);
     }
+
+    @PostMapping("/startDriving")
+    @Operation(summary = "开始代驾")
+    @SaCheckLogin
+    public R startDriving(@RequestBody @Valid StartDrivingForm form) {
+        long driverId = StpUtil.getLoginIdAsLong();
+        form.setDriverId(driverId);
+        int rows = orderService.startDriving(form);
+        return R.ok().put("rows", rows);
+    }
 }

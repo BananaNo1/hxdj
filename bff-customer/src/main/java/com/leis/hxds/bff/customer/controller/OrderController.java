@@ -2,6 +2,7 @@ package com.leis.hxds.bff.customer.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.stp.StpUtil;
+import com.leis.hxds.bff.customer.controller.form.ConfirmArriveStartPlaceForm;
 import com.leis.hxds.bff.customer.controller.form.DeleteUnAcceptOrderForm;
 import com.leis.hxds.bff.customer.controller.form.HasCustomerCurrentOrderForm;
 import com.leis.hxds.bff.customer.controller.form.SearchOrderStatusForm;
@@ -65,5 +66,13 @@ public class OrderController {
         form.setCustomerId(customerId);
         HashMap map = orderService.hasCustomerCurrentOrder(form);
         return R.ok().put("result", map);
+    }
+
+    @PostMapping("/confirmArriveStartPlace")
+    @SaCheckLogin
+    @Operation(summary = "确认司机已经到达")
+    public R confirmArriveStartPlace(@RequestBody @Valid ConfirmArriveStartPlaceForm form) {
+        boolean result = orderService.confirmArriveStartPlace(form);
+        return R.ok().put("result", result);
     }
 }

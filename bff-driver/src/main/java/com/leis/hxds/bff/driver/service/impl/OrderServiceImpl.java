@@ -86,4 +86,12 @@ public class OrderServiceImpl implements OrderService {
         }
         return rows;
     }
+
+    @Override
+    public int startDriving(StartDrivingForm form) {
+        R r = odrServiceApi.startDriving(form);
+        int rows = MapUtil.getInt(r, "rows");
+        //发送消息通知
+        return rows;
+    }
 }

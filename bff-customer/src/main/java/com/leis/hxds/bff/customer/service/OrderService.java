@@ -1,6 +1,7 @@
 package com.leis.hxds.bff.customer.service;
 
 import com.leis.hxds.bff.customer.controller.CreateNewOrderForm;
+import com.leis.hxds.bff.customer.controller.form.ConfirmArriveStartPlaceForm;
 import com.leis.hxds.bff.customer.controller.form.DeleteUnAcceptOrderForm;
 import com.leis.hxds.bff.customer.controller.form.HasCustomerCurrentOrderForm;
 import com.leis.hxds.bff.customer.controller.form.SearchOrderStatusForm;
@@ -15,4 +16,6 @@ public interface OrderService {
     String deleteUnAcceptOrder(DeleteUnAcceptOrderForm form);
 
     HashMap hasCustomerCurrentOrder(HasCustomerCurrentOrderForm form);
+
+    boolean confirmArriveStartPlace(ConfirmArriveStartPlaceForm form);
 }

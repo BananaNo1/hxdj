@@ -27,4 +27,8 @@ public interface OrderService {
     HashMap searchOrderForMoveById(Map param);
 
     int arriveStartPlate(Map param);
+
+    boolean confirmArriveStartPlace(long orderId);
+
+    int startDriving(Map param);
 }

@@ -15,4 +15,6 @@ public interface OrderService {
     HashMap searchOrderForMoveById(SearchOrderForMoveByIdForm form);
 
     int arriveStartPlace(ArriveStartPlaceForm form);
+
+    int startDriving(StartDrivingForm form);
 }
