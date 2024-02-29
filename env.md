@@ -314,8 +314,8 @@ create table hxds.order_monitoring(
 create index om_index_1 on hxds.order_monitoring("order_id");
 create index om_index_2 on hxds.order_monitoring("status");
 create index om_index_3 on hxds.order_monitoring("safety");
-create index om_index_4 on hxds.order_monitoring("suggestion");
-create index om_index_5 on hxds.order_monitoring("reviews");
+create index om_index_4 on hxds.order_monitoring("reviews");
+create index om_index_5 on hxds.order_monitoring("alarm");
 create index om_index_6 on hxds.order_monitoring("create_time");
 
 create sequence hxds.om_sequence start with 1 increment by 1;
