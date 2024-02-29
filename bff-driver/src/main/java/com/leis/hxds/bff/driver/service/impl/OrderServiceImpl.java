@@ -94,4 +94,14 @@ public class OrderServiceImpl implements OrderService {
         //发送消息通知
         return rows;
     }
+
+    @Override
+    @Transactional
+    @LcnTransaction
+    public int updateOrderStatus(UpdateOrderStatusForm form) {
+        R r = odrServiceApi.updateOrderStatus(form);
+        int rows = MapUtil.getInt(r, "rows");
+        //todo 判断订单的状态，然后实现后续业务
+        return rows;
+    }
 }
