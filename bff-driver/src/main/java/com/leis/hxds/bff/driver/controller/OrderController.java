@@ -3,7 +3,6 @@ package com.leis.hxds.bff.driver.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.stp.StpUtil;
-import cn.hutool.core.bean.BeanUtil;
 import com.leis.hxds.bff.driver.controller.form.*;
 import com.leis.hxds.bff.driver.service.OrderService;
 import com.leis.hxds.common.util.R;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/order")
