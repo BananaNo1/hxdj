@@ -7,6 +7,8 @@ import com.leis.hxds.common.util.PageUtils;
 import com.leis.hxds.common.util.R;
 import com.leis.hxds.mis.api.controller.form.SearchOrderByPageForm;
 import com.leis.hxds.mis.api.controller.form.SearchOrderComprehensiveInfoForm;
+import com.leis.hxds.mis.api.controller.form.SearchOrderLastGpsForm;
+import com.leis.hxds.mis.api.controller.form.SearchOrderStatusForm;
 import com.leis.hxds.mis.api.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -43,4 +45,11 @@ public class OrderController {
         return R.ok().put("result", result);
     }
 
+    @PostMapping("/searchOrderLastGps")
+    @SaCheckPermission(value = {"ROOT", "ORDER:SELECT"}, mode = SaMode.OR)
+    @Operation(summary = "获取某个订单最后的GPS定位")
+    public R searchOrderLastGps(@RequestBody @Valid SearchOrderLastGpsForm form) {
+        HashMap result = orderService.searchOrderLastGps(form);
+        return R.ok().put("result", result);
+    }
 }
