@@ -148,4 +148,78 @@
             and driver_id =#{driverId}
         </if>
     </update>
+
+    <select id="searchOrderByPage" parameterType="Map" resultType="HashMap">
+        select cast(id as char) as id,
+        cast(start_place as char) as startPlace,
+        cast(end_place as char) as endPlace,
+        cast(real_mileage as char) as realMileage,
+        cast(real_fee as char) as realFee,
+        `status`,
+        DATE_FORMAT(create_time,'%Y-%m-%d %H:%i') as createTime
+        from tb_order
+        where 1=1
+        <if test="orderId!=null">
+            and id =#{orderId}
+        </if>
+        <if test="customerId!=null">
+            and customer_id =#{customerId}
+        </if>
+        <if test="driverId!=null">
+            and driver_id =#{driverId}
+        </if>
+        <if test="startDate!=null and endDate!=null">
+            and date between #{startDate} and #{endDate}
+        </if>
+        <if test="status!=null">
+            and `status` =#{status}
+        </if>
+        order by id desc
+        limit #{start},#{length}
+    </select>
+
+    <select id="searchOrderCount" parameterType="Map" resultType="long">
+        select count(*)
+        from tb_order
+        where 1=1
+        <if test="orderId!=null">
+            and id =#{orderId}
+        </if>
+        <if test="customerId!=null">
+            and customer_id =#{customerId}
+        </if>
+        <if test="driverId!=null">
+            and driver_id =#{driverId}
+        </if>
+        <if test="startDate!=null and endDate!=null">
+            and date between #{startDate} and #{endDate}
+        </if>
+        <if test="status!=null">
+            and `status` =#{status}
+        </if>
+    </select>
+
+    <select id="searchOrderContent" parameterType="long" resultType="HashMap">
+        select cast(o.driver_id as char)                      as driverId,
+               cast(o.customer_id as char)                    as customerId,
+               o.car_plate                                    as carPlate,
+               o.car_type                                     as carType,
+               DATE_FORMAT(o.accept_time, '%Y-%m-%d %H:%i')   as acceptTime,
+               DATE_FORMAT(o.arrive_time, '%Y-%m-%d %H:%i')   as arriveTime,
+               DATE_FORMAT(o.start_time, '%Y-%m-%d %H:%i')    as startTime,
+               DATE_FORMAT(o.end_time, '%Y-%m-%d %H:%i')      as endTime,
+               o.waiting_minute                               as waitingMinute,
+               TIMESTAMPDIFF(minute,o.start_time, o.end_time) as `driverMinute`,
+               cast(o.real_mileage as char)                   as realMileage,
+               cast(o.real_fee as char)                       as realFee,
+               o.`status`,
+               cast(o.charge_rule_id as char)                 as chargeRuleId,
+               cast(o.cacel_rule_id as char)                  as canelRuleId,
+               cast(p.rule_id as char)                        as profitsharingRuleId,
+               o.start_place_location                         as startPlaceLocation,
+               o.end_place_location                           as endPlaceLocation
+        from tb_order o
+                 left join tb_order_profitsharing p on o.id = p.order_id
+        where o.id = #{orderId}
+    </select>
 </mapper>

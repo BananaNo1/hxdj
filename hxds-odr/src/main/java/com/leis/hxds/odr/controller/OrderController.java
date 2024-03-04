@@ -2,6 +2,7 @@ package com.leis.hxds.odr.controller;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.json.JSONObject;
+import com.leis.hxds.common.util.PageUtils;
 import com.leis.hxds.common.util.R;
 import com.leis.hxds.odr.controller.form.*;
 import com.leis.hxds.odr.db.pojo.OrderBillEntity;
@@ -157,4 +158,24 @@ public class OrderController {
         int rows = orderService.updateOrderStatus(param);
         return R.ok().put("rows", rows);
     }
+
+    @PostMapping("/searchOrderByPage")
+    @Operation(summary = "查询订单分页记录")
+    public R searchOrderByPage(@RequestBody @Valid SearchOrderByPageForm form) {
+        Map param = BeanUtil.beanToMap(form);
+        int page = form.getPage();
+        int length = form.getLength();
+        int start = (page - 1) * length;
+        param.put("start", start);
+        PageUtils pageUtils = orderService.searchOrderByPage(param);
+        return R.ok().put("result", pageUtils);
+    }
+
+    @PostMapping("/searchOrderContent")
+    @Operation(summary = "查询订单详情")
+    public R searchOrderContent(SearchOrderContentForm form) {
+        Map map = orderService.searchOrderContent(form.getOrderId());
+        return R.ok().put("result", map);
+    }
+
 }

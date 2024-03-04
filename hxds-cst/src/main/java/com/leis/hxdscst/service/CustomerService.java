@@ -13,4 +13,6 @@ public interface CustomerService {
     String login(String code);
 
     HashMap searchCustomerInfoInOrder(long customerId);
+
+    HashMap searchCustomerBriefInfo(long customerId);
 }

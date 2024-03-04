@@ -1,8 +1,11 @@
 package com.leis.hxds.odr.service.impl;
 
 import cn.hutool.core.map.MapUtil;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
 import com.codingapi.txlcn.tc.annotation.LcnTransaction;
 import com.leis.hxds.common.exception.HxdsException;
+import com.leis.hxds.common.util.PageUtils;
 import com.leis.hxds.odr.db.dao.OrderBillDao;
 import com.leis.hxds.odr.db.dao.OrderDao;
 import com.leis.hxds.odr.db.pojo.OrderBillEntity;
@@ -16,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -219,5 +223,30 @@ public class OrderServiceImpl implements OrderService {
             throw new HxdsException("更新取消订单记录失败");
         }
         return rows;
+    }
+
+    @Override
+    public PageUtils searchOrderByPage(Map param) {
+        long count = orderDao.searchOrderCount(param);
+        ArrayList<HashMap> list = null;
+        if (count == 0) {
+            list = new ArrayList<>();
+        } else {
+            list = orderDao.searchOrderByPage(param);
+        }
+        int start = (Integer) param.get("start");
+        int length = (Integer) param.get("length");
+        PageUtils pageUtils = new PageUtils(list, count, start, length);
+        return pageUtils;
+    }
+
+    @Override
+    public HashMap searchOrderContent(long orderId) {
+        HashMap map = orderDao.searchOrderContent(orderId);
+        JSONObject startPlaceLocation = JSONUtil.parseObj(MapUtil.getStr(map, "startPlaceLocation"));
+        JSONObject endPlaceLocation = JSONUtil.parseObj(MapUtil.getStr(map, "endPlaceLocation"));
+        map.replace("startPlaceLocation", startPlaceLocation);
+        map.replace("endPlaceLocation", endPlaceLocation);
+        return map;
     }
 }

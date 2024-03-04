@@ -39,4 +39,11 @@
         where id = #{customerId}
     </select>
 
+    <select id="searchCustomerBriefInfo" parameterType="long" resultType="HashMap">
+        select cast(id as char) as id,
+               sex,
+               tel
+        from tb_customer
+        where id = #{customerId}
+    </select>
 </mapper>

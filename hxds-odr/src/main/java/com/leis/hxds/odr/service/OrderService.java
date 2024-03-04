@@ -1,5 +1,6 @@
 package com.leis.hxds.odr.service;
 
+import com.leis.hxds.common.util.PageUtils;
 import com.leis.hxds.odr.db.pojo.OrderBillEntity;
 import com.leis.hxds.odr.db.pojo.OrderEntity;
 
@@ -33,4 +34,8 @@ public interface OrderService {
     int startDriving(Map param);
 
     int updateOrderStatus(Map param);
+
+    PageUtils searchOrderByPage(Map param);
+
+    HashMap searchOrderContent(long orderId);
 }

@@ -8,7 +8,29 @@
         into
         hxds.order_gps("id","order_id","driver_id","customer_id","latitude","longitude","speed","create_time")
         values(next value for
-        hxds.og_sequence,${order_id},${driver_id},${customerId},'${latitude}','${longitude}','${speed}',now())
+        hxds.og_sequence,
+        ${order_id},
+        ${driver_id},
+        ${customerId},
+        '${latitude}',
+        '${longitude}',
+        '${speed}',
+        now
+        (
+        )
+        )
     </insert>
 
+    <select id="searchOrderGps" parameterType="long" resultType="HashMap">
+        select "id", "latitude", "longitude", TO_CHAR("create_time", 'yyyy-MM-dd HH:mm:ss') as 'createTime'
+        from hxds.order_gps
+        where "order_id" = #{orderId}
+    </select>
+
+    <select id="searchOrderLastGps" parameterType="long" resultType="HashMap">
+        select "id", "latitude", "longitude", TO_CHAR("create_time", 'yyyy-MM-dd HH:mm:ss') as 'createTime'
+        from hxds.order_gps
+        where "order_id" = #{orderId}
+        order by "id" desc limit 1
+    </select>
 </mapper>

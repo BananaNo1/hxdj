@@ -188,4 +188,10 @@
         set real_auth = #{realAuth}
         where id = #{driverId}
     </update>
+
+    <select id="searchDriverBriefInfo" parameterType="long" resultType="HashMap">
+        select cast(id as char) as id, `name`, tel
+        from tb_driver
+        where id = #{driverId}
+    </select>
 </mapper>

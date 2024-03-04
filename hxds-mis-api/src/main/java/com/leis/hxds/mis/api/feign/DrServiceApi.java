@@ -1,6 +1,7 @@
 package com.leis.hxds.mis.api.feign;
 
 import com.leis.hxds.common.util.R;
+import com.leis.hxds.mis.api.controller.form.SearchDriverBriefInfoForm;
 import com.leis.hxds.mis.api.controller.form.SearchDriverByPageForm;
 import com.leis.hxds.mis.api.controller.form.SearchDriverRealSummaryForm;
 import com.leis.hxds.mis.api.controller.form.UpdateDriverRealAuthForm;
@@ -18,4 +19,7 @@ public interface DrServiceApi {
 
     @PostMapping("/driver/updateDriverRealAuth")
     R updateDriverRealAuth(UpdateDriverRealAuthForm form);
+
+    @PostMapping("/driver/searchDriverBriefInfo")
+    R searchDriverBriefInfo(SearchDriverBriefInfoForm form);
 }
