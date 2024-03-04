@@ -66,6 +66,7 @@ public class DriverController {
         HashMap map = driverService.login(form);
         if (map != null) {
             long driverId = MapUtil.getLong(map, "id");
+            //realAuth 1未认证，2已认证，3审核中
             byte realAuth = Byte.parseByte(MapUtil.getStr(map, "realAuth"));
             boolean archive = MapUtil.getBool(map, "archive");
             StpUtil.login(driverId);

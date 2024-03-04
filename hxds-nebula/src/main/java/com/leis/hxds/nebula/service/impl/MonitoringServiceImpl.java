@@ -2,14 +2,17 @@ package com.leis.hxds.nebula.service.impl;
 
 import cn.hutool.core.util.IdUtil;
 import com.leis.hxds.common.exception.HxdsException;
+import com.leis.hxds.nebula.db.dao.OrderMonitoringDao;
 import com.leis.hxds.nebula.db.dao.OrderVoiceTextDao;
 import com.leis.hxds.nebula.db.pojo.OrderVoiceTextEntity;
 import com.leis.hxds.nebula.service.MonitoringService;
+import com.leis.hxds.nebula.task.VoiceTextCheckTask;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
@@ -20,6 +23,12 @@ public class MonitoringServiceImpl implements MonitoringService {
 
     @Resource
     private OrderVoiceTextDao orderVoiceTextDao;
+
+    @Resource
+    private OrderMonitoringDao orderMonitoringDao;
+
+    @Resource
+    private VoiceTextCheckTask voiceTextCheckTask;
 
     @Value("${minio.endpoint}")
     private String endpoint;
@@ -35,11 +44,8 @@ public class MonitoringServiceImpl implements MonitoringService {
         //上传minio
         try {
             MinioClient client = new MinioClient.Builder().endpoint(endpoint).credentials(accessKey, secretKey).build();
-            client.putObject(
-                    PutObjectArgs.builder().bucket("hxds-record").object(name)
-                            .stream(file.getInputStream(), -1, 20971502)
-                            .contentType("audio/x-mpeg")
-                            .build());
+            client.putObject(PutObjectArgs.builder().bucket("hxds-record").object(name).stream(file.getInputStream(),
+                    -1, 20971502).contentType("audio/x-mpeg").build());
         } catch (Exception e) {
             log.error("上传代驾录音文件失败", e);
             throw new HxdsException("上传代驾录音文件失败");
@@ -61,6 +67,19 @@ public class MonitoringServiceImpl implements MonitoringService {
             throw new HxdsException("保存录音文稿失败");
         }
 
-        //todo 执行文稿内容审查
+        //执行文稿内容审查
+        voiceTextCheckTask.checkText(orderId, text, uuid);
     }
+
+    @Override
+    @Transactional
+    public int insertOrderMonitoring(long orderId) {
+        int rows = orderMonitoringDao.insert(orderId);
+        if (rows != 1) {
+            throw new HxdsException("添加订单监控摘要记录失败");
+        }
+        return rows;
+    }
+
+
 }

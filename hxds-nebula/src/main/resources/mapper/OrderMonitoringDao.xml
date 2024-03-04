@@ -3,5 +3,52 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.leis.hxds.nebula.db.dao.OrderMonitoringDao">
+    <insert id="insert" parameterType="long">
+        upsert
+        into hxds.order_monitoring("id","order_id","status","records","safety","reviews","alarm","create_time")
+            values(next value for hxds.om_sequence,
+        #{orderId},
+        1,
+        0,
+        'common',
+        0,
+        1,
+        now
+        (
+        )
+        )
+    </insert>
 
+    <select id="searchOrderRecordAndReviews" parameterType="long" resultType="HashMap">
+        select "id", "records", "reviews"
+        from hxds.order_monitoring
+        where "order_id" = #{orderId}
+    </select>
+
+    <update id="updateOrderMonitoring" parameterType="com.leis.hxds.nebula.db.pojo.OrderMonitoringEntity">
+        upsert into hxds.order_monitoring("id","order_id",
+        <if test="status!=null">
+            "status",
+        </if>
+        <if test="safety!=null">
+            "safety",
+        </if>
+        <if test="reviews!=null">
+            "reviews",
+        </if>
+        "records"
+        )
+        values(#{id},#{orderId},
+        <if test="status!=null">
+            "status",
+        </if>
+        <if test="safety!=null">
+            "safety",
+        </if>
+        <if test="reviews!=null">
+            "reviews",
+        </if>
+        #{records}
+        )
+    </update>
 </mapper>

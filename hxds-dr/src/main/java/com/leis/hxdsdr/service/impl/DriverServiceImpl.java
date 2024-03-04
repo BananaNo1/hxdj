@@ -142,7 +142,7 @@ public class DriverServiceImpl implements DriverService {
         if (result != null && result.containsKey("archive")) {
             int temp = MapUtil.getInt(result, "archive");
             boolean archive = temp == 1 ? true : false;
-            result.replace("archive", archive);
+            result.replace("archive", archive);//archive 是否在腾讯云归档存放司机面部信息
         }
         return result;
     }

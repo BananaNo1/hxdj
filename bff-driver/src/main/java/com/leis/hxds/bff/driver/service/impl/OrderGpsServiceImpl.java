@@ -1,0 +1,25 @@
+package com.leis.hxds.bff.driver.service.impl;
+
+import cn.hutool.core.map.MapUtil;
+import com.leis.hxds.bff.driver.controller.form.InsertOrderGpsForm;
+import com.leis.hxds.bff.driver.feign.NebulaServiceApi;
+import com.leis.hxds.bff.driver.service.OrderGpsService;
+import com.leis.hxds.common.util.R;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+
+@Service
+public class OrderGpsServiceImpl implements OrderGpsService {
+
+    @Resource
+    private NebulaServiceApi nebulaServiceApi;
+
+
+    @Override
+    public int insertOrderGps(InsertOrderGpsForm form) {
+        R r = nebulaServiceApi.insertOrderGps(form);
+        int rows = MapUtil.getInt(r, "rows");
+        return rows;
+    }
+}
