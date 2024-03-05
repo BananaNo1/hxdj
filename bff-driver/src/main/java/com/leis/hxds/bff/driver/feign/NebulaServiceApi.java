@@ -1,6 +1,8 @@
 package com.leis.hxds.bff.driver.feign;
 
 import com.leis.hxds.bff.driver.config.MultiPartSupportConfig;
+import com.leis.hxds.bff.driver.controller.form.CalculateIncentiveFeeForm;
+import com.leis.hxds.bff.driver.controller.form.CalculateOrderMileageForm;
 import com.leis.hxds.bff.driver.controller.form.InsertOrderGpsForm;
 import com.leis.hxds.bff.driver.controller.form.InsertOrderMonitoringForm;
 import com.leis.hxds.common.util.R;
@@ -21,5 +23,9 @@ public interface NebulaServiceApi {
 
     @PostMapping("/order/gps/insertOrderGps")
     R insertOrderGps(InsertOrderGpsForm form);
+
+    @PostMapping("/order/gps/calculateOrderMileage")
+    R calculateOrderMileage(CalculateOrderMileageForm form);
+
 
 }

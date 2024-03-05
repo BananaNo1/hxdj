@@ -18,14 +18,14 @@ public class UpdateBillFeeForm {
     private String total;
 
 
-    @NotBlank(message = "mileagePrice不能为空")
-    @Pattern(regexp = "^[1-9]\\d*\\.\\d{1,2}$|^0\\.\\d{1,2}$|^[1-9]\\d*$", message = "mileagePrice内容不正确")
+    @NotBlank(message = "mileageFee不能为空")
+    @Pattern(regexp = "^[1-9]\\d*\\.\\d{1,2}$|^0\\.\\d{1,2}$|^[1-9]\\d*$", message = "mileageFee内容不正确")
     @Schema(description = "里程费")
-    private String mileagePrice;
+    private String mileageFee;
 
     @NotBlank(message = "waitingFee不能为空")
     @Pattern(regexp = "^[1-9]\\d*\\.\\d{1,2}$|^0\\.\\d{1,2}$|^[1-9]\\d*$", message = "waitingFee内容不正确")
-    @Schema(description = "里程费")
+    @Schema(description = "等时费")
     private String waitingFee;
 
     @NotBlank(message = "totalFee不能为空")
@@ -45,12 +45,12 @@ public class UpdateBillFeeForm {
 
     @NotBlank(message = "returnFee不能为空")
     @Pattern(regexp = "^[1-9]\\d*\\.\\d{1,2}$|^0\\.\\d{1,2}$|^[1-9]\\d*$", message = "returnFee内容不正确")
-    @Schema(description = "其他费用")
+    @Schema(description = "返程费用")
     private String returnFee;
 
     @NotBlank(message = "incentiveFee不能为空")
     @Pattern(regexp = "^[1-9]\\d*\\.\\d{1,2}$|^0\\.\\d{1,2}$|^[1-9]\\d*$", message = "incentiveFee内容不正确")
-    @Schema(description = "其他费用")
+    @Schema(description = "系统奖励费用")
     private String incentiveFee;
 
     @NotNull(message = "orderId不能为空")

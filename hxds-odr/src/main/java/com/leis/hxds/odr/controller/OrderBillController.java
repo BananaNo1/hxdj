@@ -19,7 +19,7 @@ import java.util.Map;
 @RequestMapping("/bill")
 @Tag(name = "OrderBillController", description = "订单费用账单Web接口")
 public class OrderBillController {
-    
+
     @Resource
     private OrderBillService orderBillService;
 

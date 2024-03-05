@@ -238,4 +238,20 @@
             real_fee       = #{total}
         where id = #{orderId}
     </update>
+
+    <select id="validDriverOwnOrder" parameterType="Map" resultType="long">
+        select count(*)
+        from tb_order
+        where id = #{orderId}
+          and driver_id = #{driverId}
+    </select>
+
+    <select id="searchSettlementNeedData" parameterType="long" resultType="HashMap">
+        select DATE_FORMAT(accept_time, '%Y-%m-%d %H:%i:%s') as acceptTime,
+               DATE_FORMAT(start_time, '%Y-%m-%d %H:%i:%s')  as startTime,
+               waiting_minute                                as waitingMinute,
+               cast(favour_fee as char)                      as favourFee,
+        from tb_order
+        where id = #{orderId}
+    </select>
 </mapper>

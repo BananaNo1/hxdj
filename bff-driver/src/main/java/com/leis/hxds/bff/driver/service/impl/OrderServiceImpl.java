@@ -1,22 +1,28 @@
 package com.leis.hxds.bff.driver.service.impl;
 
 import cn.hutool.core.map.MapUtil;
+import cn.hutool.core.util.NumberUtil;
 import com.codingapi.txlcn.tc.annotation.LcnTransaction;
 import com.leis.hxds.bff.driver.controller.form.*;
 import com.leis.hxds.bff.driver.feign.CstServiceApi;
 import com.leis.hxds.bff.driver.feign.NebulaServiceApi;
 import com.leis.hxds.bff.driver.feign.OdrServiceApi;
+import com.leis.hxds.bff.driver.feign.RuleServiceApi;
 import com.leis.hxds.bff.driver.service.OrderService;
+import com.leis.hxds.common.exception.HxdsException;
 import com.leis.hxds.common.util.R;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.math.RoundingMode;
 import java.util.HashMap;
 
 @Service
 public class OrderServiceImpl implements OrderService {
 
+    @Resource
+    private RuleServiceApi ruleServiceApi;
     @Resource
     private OdrServiceApi odrServiceApi;
 
@@ -111,6 +117,104 @@ public class OrderServiceImpl implements OrderService {
         R r = odrServiceApi.updateOrderStatus(form);
         int rows = MapUtil.getInt(r, "rows");
         //todo 判断订单的状态，然后实现后续业务
+        return rows;
+    }
+
+    @Override
+    @Transactional
+    @LcnTransaction
+    public int updateOrderBill(UpdateBillFeeForm form) {
+        /**
+         * 1.判断司机是否关联订单
+         */
+        ValidDriverOwnOrderForm form1 = new ValidDriverOwnOrderForm();
+        form1.setOrderId(form.getOrderId());
+        form1.setDriverId(form.getDriverId());
+        R r = odrServiceApi.validDriverOwnOrder(form1);
+        boolean bool = MapUtil.getBool(r, "result");
+        if (!bool) {
+            throw new HxdsException("司机未关联该订单");
+        }
+        /**
+         * 2.计算订单里程数据
+         */
+        CalculateOrderMileageForm form2 = new CalculateOrderMileageForm();
+        form2.setOrderId(form.getOrderId());
+        r = nebulaServiceApi.calculateOrderMileage(form2);
+        String mileage = (String) r.get("result");
+        mileage = NumberUtil.div(mileage, "1000", 1, RoundingMode.CEILING).toString();
+        /**
+         * 3.查询订单信息
+         */
+        SearchSettlementNeedDataForm form3 = new SearchSettlementNeedDataForm();
+        form3.setOrderId(form.getOrderId());
+        r = odrServiceApi.searchSettlementNeedData(form3);
+        HashMap map = (HashMap) r.get("result");
+        String acceptTime = MapUtil.getStr(map, "acceptTime");
+        String startTime = MapUtil.getStr(map, "startTime");
+        int waitingMinute = MapUtil.getInt(map, "waitingMinute");
+        String favourFee = MapUtil.getStr(map, "favourFee");
+        /**
+         * 4.计算代价费
+         */
+        CalculateOrderChargeForm form4 = new CalculateOrderChargeForm();
+        form4.setMileage(mileage);
+        form4.setTime(startTime.split(" ")[1]);
+        form4.setMinute(waitingMinute);
+        r = ruleServiceApi.calculateOrderCharge(form4);
+        map = (HashMap) r.get("result");
+        String mileageFee = MapUtil.getStr(map, "mileageFee");
+        String returnFee = MapUtil.getStr(map, "returnFee");
+        String waitingFee = MapUtil.getStr(map, "waitingFee");
+        String amount = MapUtil.getStr(map, "amount");
+        String returnMileage = MapUtil.getStr(map, "returnMileage");
+
+        /**
+         * 5.计算系统奖励费用
+         */
+        CalculateIncentiveFeeForm form5 = new CalculateIncentiveFeeForm();
+        form5.setAcceptTime(acceptTime);
+        form5.setDriverId(form.getDriverId());
+        r = ruleServiceApi.calculateIncentiveFee(form5);
+        String incentiveFee = (String) r.get("result");
+
+        form.setMileageFee(mileageFee);
+        form.setReturnFee(returnFee);
+        form.setWaitingFee(waitingFee);
+        form.setIncentiveFee(incentiveFee);
+        form.setRealMileage(mileage);
+        form.setReturnMileage(returnMileage);
+        //计算总费用
+        String total =
+                NumberUtil.add(amount, form.getTotalFee(), form.getParkingFee(), form.getOtherFee(), favourFee).toString();
+        /**
+         * 6.计算分账费用
+         */
+        CalculateProfitsharingForm form6 = new CalculateProfitsharingForm();
+        form6.setOrderId(form.getOrderId());
+        form6.setAmount(form.getTotal());
+        r = ruleServiceApi.calculateProfitsharing(form6);
+        map = (HashMap) r.get("result");
+        long ruleId = MapUtil.getLong(map, "ruleId");
+        String systemIncome = MapUtil.getStr(map, "systemIncome");
+        String driverIncome = MapUtil.getStr(map, "driverIncome");
+        String paymentRate = MapUtil.getStr(map, "paymentRate");
+        String paymentFee = MapUtil.getStr(map, "paymentFee");
+        String taxRate = MapUtil.getStr(map, "taxRate");
+        String taxFee = MapUtil.getStr(map, "taxFee");
+        form.setRuleId(ruleId);
+        form.setPaymentRate(paymentRate);
+        form.setPaymentFee(paymentFee);
+        form.setTaxRate(taxRate);
+        form.setTaxFee(taxFee);
+        form.setSystemIncome(systemIncome);
+        form.setDriverIncome(driverIncome);
+
+        /**
+         * 7.更新代驾费账单数据
+         */
+        r = odrServiceApi.updateBillFee(form);
+        int rows = MapUtil.getInt(r, "rows");
         return rows;
     }
 }

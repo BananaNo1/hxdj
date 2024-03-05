@@ -41,4 +41,8 @@ public interface OrderService {
     HashMap searchOrderContent(long orderId);
 
     ArrayList<HashMap> searchOrderStartLocationIn30Days();
+
+    boolean validDriverOwnOrder(Map param);
+
+    HashMap searchSettlementNeedData(long orderId);
 }

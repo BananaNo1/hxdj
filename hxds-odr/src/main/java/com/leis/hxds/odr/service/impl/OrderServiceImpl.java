@@ -269,4 +269,16 @@ public class OrderServiceImpl implements OrderService {
         });
         return result;
     }
+
+    @Override
+    public boolean validDriverOwnOrder(Map param) {
+        long count = orderDao.validDriverOwnOrder(param);
+        return count == 1 ? true : false;
+    }
+
+    @Override
+    public HashMap searchSettlementNeedData(long orderId) {
+        HashMap map = orderDao.searchSettlementNeedData(orderId);
+        return map;
+    }
 }
