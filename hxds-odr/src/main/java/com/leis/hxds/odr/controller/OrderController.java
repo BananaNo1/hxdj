@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -176,6 +177,13 @@ public class OrderController {
     public R searchOrderContent(SearchOrderContentForm form) {
         Map map = orderService.searchOrderContent(form.getOrderId());
         return R.ok().put("result", map);
+    }
+
+    @PostMapping("/searchOrderStartLocationIn30Days")
+    @Operation(summary = "查询30天以内订单上车定位")
+    public R searchOrderStartLocationIn30Days() {
+        ArrayList<HashMap> result = orderService.searchOrderStartLocationIn30Days();
+        return R.ok().put("result", result);
     }
 
 }

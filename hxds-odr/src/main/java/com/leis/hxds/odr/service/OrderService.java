@@ -4,6 +4,7 @@ import com.leis.hxds.common.util.PageUtils;
 import com.leis.hxds.odr.db.pojo.OrderBillEntity;
 import com.leis.hxds.odr.db.pojo.OrderEntity;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,4 +39,6 @@ public interface OrderService {
     PageUtils searchOrderByPage(Map param);
 
     HashMap searchOrderContent(long orderId);
+
+    ArrayList<HashMap> searchOrderStartLocationIn30Days();
 }

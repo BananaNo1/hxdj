@@ -222,4 +222,20 @@
                  left join tb_order_profitsharing p on o.id = p.order_id
         where o.id = #{orderId}
     </select>
+
+    <select id="searchOrderStartLocationIn30Days" resultType="String">
+        select start_place_location
+        from tb_order
+        where start_time is not null
+          and start_time between timestampadd(day,-30, now()) and now()
+    </select>
+
+    <update id="updateOrderMileageAndFee" parameterType="Map">
+        update tb_order
+        set real_mileage   = #{realMileage},
+            return_mileage = #{returnMileage},
+            incentive_fee  = #{incentiveFee},
+            real_fee       = #{total}
+        where id = #{orderId}
+    </update>
 </mapper>

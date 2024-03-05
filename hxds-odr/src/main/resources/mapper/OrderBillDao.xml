@@ -14,4 +14,19 @@
         where order_id = #{orderId}
     </delete>
 
+    <update id="updateBillFee" parameterType="Map">
+        update tb_order_bill
+        set total         =#{total},
+            mileage_fee   = #{mileageFee},
+            waiting_fee   = #{waitingFee},
+            toll_fee      = #{tollFee},
+            parking_fee   = #{parkingFee},
+            other_fee     = #{otherFee},
+            return_fee    = #{returnFee},
+            incentive_fee = #{incentiveFee}
+        where order_id = #{orderId}
+    </update>
+
+
+
 </mapper>
