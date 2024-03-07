@@ -1,11 +1,11 @@
 package com.leis.hxds.bff.customer.service.impl;
 
 import cn.hutool.core.map.MapUtil;
-import com.leis.hxds.bff.driver.controller.form.DeleteCustomerCarByIdForm;
-import com.leis.hxds.bff.driver.controller.form.InsertCustomerCarForm;
-import com.leis.hxds.bff.driver.controller.form.SearchCustomerCarListForm;
-import com.leis.hxds.bff.driver.feign.CstServiceApi;
-import com.leis.hxds.bff.driver.service.CustomerCarService;
+import com.leis.hxds.bff.customer.controller.form.DeleteCustomerCarByIdForm;
+import com.leis.hxds.bff.customer.controller.form.InsertCustomerCarForm;
+import com.leis.hxds.bff.customer.controller.form.SearchCustomerCarListForm;
+import com.leis.hxds.bff.customer.feign.CstServiceApi;
+import com.leis.hxds.bff.customer.service.CustomerCarService;
 import com.leis.hxds.common.util.R;
 import org.springframework.stereotype.Service;
 

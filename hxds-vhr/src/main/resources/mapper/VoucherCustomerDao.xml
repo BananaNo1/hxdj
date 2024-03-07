@@ -33,4 +33,5 @@
             `status` = 2
         WHERE voucher_id = #{voucherId}
     </update>
+
 </mapper>

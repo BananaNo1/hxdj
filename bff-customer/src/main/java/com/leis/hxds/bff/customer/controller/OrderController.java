@@ -2,10 +2,7 @@ package com.leis.hxds.bff.customer.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.stp.StpUtil;
-import com.leis.hxds.bff.customer.controller.form.ConfirmArriveStartPlaceForm;
-import com.leis.hxds.bff.customer.controller.form.DeleteUnAcceptOrderForm;
-import com.leis.hxds.bff.customer.controller.form.HasCustomerCurrentOrderForm;
-import com.leis.hxds.bff.customer.controller.form.SearchOrderStatusForm;
+import com.leis.hxds.bff.customer.controller.form.*;
 import com.leis.hxds.bff.customer.service.OrderService;
 import com.leis.hxds.common.util.R;
 import io.swagger.v3.oas.annotations.Operation;
@@ -74,5 +71,25 @@ public class OrderController {
     public R confirmArriveStartPlace(@RequestBody @Valid ConfirmArriveStartPlaceForm form) {
         boolean result = orderService.confirmArriveStartPlace(form);
         return R.ok().put("result", result);
+    }
+
+    @PostMapping("/searchOrderById")
+    @SaCheckLogin
+    @Operation(summary = "根据ID查询订单信息")
+    public R searchOrderById(@RequestBody @Valid SearchOrderByIdForm form) {
+        long customerId = StpUtil.getLoginIdAsLong();
+        form.setCustomerId(customerId);
+        HashMap map = orderService.searchOrderById(form);
+        return R.ok().put("result", map);
+    }
+
+    @PostMapping("/createWxPayment")
+    @Operation(summary = "创建支付订单")
+    @SaCheckLogin
+    public R createWxPayment(@RequestBody @Valid CreateWxPaymentForm form) {
+        Long customerId = StpUtil.getLoginIdAsLong();
+        form.setCustomerId(customerId);
+        HashMap map = orderService.createWxPayment(form.getOrderId(), form.getCustomerId(), form.getVoucherId());
+        return R.ok().put("result", map);
     }
 }

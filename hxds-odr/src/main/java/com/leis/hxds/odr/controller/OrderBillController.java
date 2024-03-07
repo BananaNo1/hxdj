@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import com.leis.hxds.common.util.R;
 import com.leis.hxds.odr.controller.form.SearchReviewDriverOrderBillForm;
 import com.leis.hxds.odr.controller.form.UpdateBillFeeForm;
+import com.leis.hxds.odr.controller.form.UpdateBillPaymentForm;
 import com.leis.hxds.odr.service.OrderBillService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -35,10 +36,18 @@ public class OrderBillController {
 
     @PostMapping("/searchReviewDriverOrderBill")
     @Operation(summary = "查询司机预览账单")
-    public R searchReviewDriverOrderBill(SearchReviewDriverOrderBillForm form){
+    public R searchReviewDriverOrderBill(@RequestBody @Valid SearchReviewDriverOrderBillForm form) {
         Map param = BeanUtil.beanToMap(form);
         HashMap map = orderBillService.searchReviewDriverOrderBill(param);
-        return R.ok().put("result",map);
+        return R.ok().put("result", map);
+    }
+
+    @PostMapping("/updateBillPayment")
+    @Operation(summary = "查询司机预览账单")
+    public R updateBillPayment(@RequestBody @Valid UpdateBillPaymentForm form) {
+        Map<String, Object> param = BeanUtil.beanToMap(form);
+        int rows = orderBillService.updateBillPayment(param);
+        return R.ok().put("rows", rows);
     }
 
 }

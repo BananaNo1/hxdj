@@ -254,4 +254,62 @@
         from tb_order
         where id = #{orderId}
     </select>
+
+    <select id="searchOrderById" parameterType="Map" resultType="HashMap">
+        select cast(o.id as char) as id,
+        cast(o.driver_id as char) as driverId,
+        cast(o.customer_id as char) as customerId,
+        o.start_place as startPlace,
+        o.start_place_location as startPlaceLocation,
+        o.end_place as endPlace,
+        o.end_place_location as endPlaceLocation,
+        cast(b.total as char) as total,
+        cast(b.real_pay as char) as realPay,
+        cast(b.mileage_fee as char) as mileageFee,
+        cast(o.favour_fee as char) as favourFee,
+        cast(o.incentive_fee as char) as incentiveFee,
+        cast(b.waiting_fee as char) as waitingFee,
+        cast(b.return_fee as char) as returnFee,
+        cast(b.parking_fee as char) as parkingFee,
+        cast(b.toll_fee as char) as tollFee,
+        cast(b.other_fee as char) as otherFee,
+        cast(b.voucher_fee as char) as voucherFee,
+        cast(o.real_mileage as char) as realMileage,
+        o.waiting_minute as waitingMinute,
+        b.base_mileage as baseMileage,
+        cast(b.base_mileage_price as char) as baseMileagePrice,
+        cast(b.exceed_mileage_price as char) as exceedMileagePrice,
+        b.base_minute as baseMinute,
+        cast(b.exceed_return_price as char) as exceedReturnPrice,
+        cast(o.return_mileage as char) as returnMileage,
+        o.car_plate as carPlate,
+        o.carType as carType,
+        o.status,
+        DATE_FORMAT(o.create_time,'%Y-%m-%d %H-%i-%s') as createTime,
+        from tb_order o
+        join tb_order_bill b on o.id = b.order_id
+        where o.id = #{orderId}
+        <if test="driverId!=null">
+            and driver_id=#{driverId}
+        </if>
+        <if test="customerId!=null">
+            and customer_id =#{customerId}
+        </if>
+    </select>
+
+    <select id="validCanPayOrder" parameterType="Map" resultType="HashMap">
+        select cast(real_fee as char)  as realFee,
+               cast(driver_id as char) as driverId,
+               uuid
+        from tb_order
+        where id = #{orderId}
+          and customer_id = #{customerId}
+          and `status` = 6
+    </select>
+
+    <update id="updateOrderPrepayId" parameterType="Map">
+        update tb_order
+        set prepay_id = #{prepayId}
+        where id = #{orderId}
+    </update>
 </mapper>

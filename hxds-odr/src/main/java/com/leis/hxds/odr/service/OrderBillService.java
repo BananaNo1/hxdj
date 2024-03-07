@@ -8,4 +8,6 @@ public interface OrderBillService {
     int updateBillFee(Map param);
 
     HashMap searchReviewDriverOrderBill(Map param);
+
+    int updateBillPayment(Map param);
 }

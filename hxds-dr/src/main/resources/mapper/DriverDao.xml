@@ -190,7 +190,13 @@
     </update>
 
     <select id="searchDriverBriefInfo" parameterType="long" resultType="HashMap">
-        select cast(id as char) as id, `name`, tel
+        select cast(id as char) as id, `name`, tel, photo
+        from tb_driver
+        where id = #{driverId}
+    </select>
+
+    <select id="searchDriverOpenId" parameterType="long" resultType="String">
+        select open_id as openId
         from tb_driver
         where id = #{driverId}
     </select>

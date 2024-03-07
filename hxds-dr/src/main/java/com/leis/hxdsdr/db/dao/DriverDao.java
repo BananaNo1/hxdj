@@ -37,6 +37,8 @@ public interface DriverDao {
     int updateDriverRealAuth(Map param);
 
     HashMap searchDriverBriefInfo(long driverId);
+
+    String searchDriverOpenId(long driverId);
 }
 
 

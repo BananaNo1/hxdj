@@ -6,7 +6,6 @@ import com.leis.hxds.snm.db.pojo.MessageEntity;
 import com.leis.hxds.snm.service.MessageService;
 import com.leis.hxds.snm.task.MessageTask;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -89,6 +88,13 @@ public class MessageController {
         entity.setSendTime(new Date());
         messageTask.sendPrivateMessageAsync(form.getReceiverIdentity(), form.getReceiverId(), form.getTtl(), entity);
         return R.ok();
+    }
+
+    @PostMapping("/receiveBillMessage")
+    @Operation(summary = "同步接受新订单消息")
+    public R receiveBillMessage(@RequestBody @Valid ReceiveBillMessageForm form) {
+        String msg = messageTask.receiveBillMessage(form.getIdentity(), form.getUserId());
+        return R.ok().put("result", msg);
     }
 
 }

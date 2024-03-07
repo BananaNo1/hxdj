@@ -2,10 +2,10 @@ package com.leis.hxds.bff.customer.controller;
 
 
 import cn.dev33.satoken.stp.StpUtil;
-import com.leis.hxds.bff.driver.controller.form.DeleteCustomerCarByIdForm;
-import com.leis.hxds.bff.driver.controller.form.InsertCustomerCarForm;
-import com.leis.hxds.bff.driver.controller.form.SearchCustomerCarListForm;
-import com.leis.hxds.bff.driver.service.CustomerCarService;
+import com.leis.hxds.bff.customer.controller.form.DeleteCustomerCarByIdForm;
+import com.leis.hxds.bff.customer.controller.form.InsertCustomerCarForm;
+import com.leis.hxds.bff.customer.controller.form.SearchCustomerCarListForm;
+import com.leis.hxds.bff.customer.service.CustomerCarService;
 import com.leis.hxds.common.util.R;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

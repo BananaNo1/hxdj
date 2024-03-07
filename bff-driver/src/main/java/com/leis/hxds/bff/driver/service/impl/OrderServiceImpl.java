@@ -4,10 +4,7 @@ import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.NumberUtil;
 import com.codingapi.txlcn.tc.annotation.LcnTransaction;
 import com.leis.hxds.bff.driver.controller.form.*;
-import com.leis.hxds.bff.driver.feign.CstServiceApi;
-import com.leis.hxds.bff.driver.feign.NebulaServiceApi;
-import com.leis.hxds.bff.driver.feign.OdrServiceApi;
-import com.leis.hxds.bff.driver.feign.RuleServiceApi;
+import com.leis.hxds.bff.driver.feign.*;
 import com.leis.hxds.bff.driver.service.OrderService;
 import com.leis.hxds.common.exception.HxdsException;
 import com.leis.hxds.common.util.R;
@@ -22,13 +19,13 @@ import java.util.HashMap;
 public class OrderServiceImpl implements OrderService {
 
     @Resource
+    private SnmServiceApi snmServiceApi;
+    @Resource
     private RuleServiceApi ruleServiceApi;
     @Resource
     private OdrServiceApi odrServiceApi;
-
     @Resource
     private CstServiceApi cstServiceApi;
-
     @Resource
     private NebulaServiceApi nebulaServiceApi;
 
@@ -117,6 +114,20 @@ public class OrderServiceImpl implements OrderService {
         R r = odrServiceApi.updateOrderStatus(form);
         int rows = MapUtil.getInt(r, "rows");
         //todo 判断订单的状态，然后实现后续业务
+        if (rows != 1) {
+            throw new HxdsException("订单状态修改失败");
+        }
+        if (form.getStatus() == 0) {
+            SendPrivateMessageForm messageForm = new SendPrivateMessageForm();
+            messageForm.setReceiverIdentity("customer_bill");
+            messageForm.setReceiverId(form.getCustomerId());
+            messageForm.setTtl(3 * 24 * 3600 * 1000);
+            messageForm.setSenderId(0L);
+            messageForm.setSenderIdentity("system");
+            messageForm.setSenderName("华夏代驾");
+            messageForm.setMsg("您有代驾订单待支付");
+            snmServiceApi.sendPrivateMessageAsync(messageForm);
+        }
         return rows;
     }
 

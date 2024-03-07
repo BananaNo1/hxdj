@@ -54,8 +54,21 @@
         from tb_order o
                  join tb_order_bill b on o.id = b.order_id
                  join tb_order_profitsharing p on o.id = p.order_id
-        where o.id = #{orderId} and o.driver_id= #{driverId}
-            and o.`status`=5
+        where o.id = #{orderId}
+          and o.driver_id = #{driverId}
+          and o.`status` = 5
     </select>
+
+    <update id="updateBillPayment" parameterType="Map">
+        update tb_order_bill
+        set real_pay =#{realPay},
+        <if test="voucherFee==null">
+            voucher_fee="0.00"
+        </if>
+        <if test="voucherFee!=null">
+            voucher_fee= #{voucherFee}
+        </if>
+        where order_id = #{orderId}
+    </update>
 
 </mapper>
