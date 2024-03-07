@@ -69,6 +69,7 @@ public class MessageDao {
 
     public HashMap searchMessageById(String id) {
         HashMap map = mongoTemplate.findById(id, HashMap.class, "message");
+
         Date sendTime = (Date) map.get("sendTime");
         sendTime = DateUtil.offset(sendTime, DateField.HOUR, -8);
         map.replace("sendTime", DateUtil.format(sendTime, "yyyy-MM-dd HH:mm"));

@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.Map;
 
 @Service
@@ -60,5 +61,11 @@ public class OrderBillServiceImpl implements OrderBillService {
             throw new HxdsException("添加分账记录失败");
         }
         return rows;
+    }
+
+    @Override
+    public HashMap searchReviewDriverOrderBill(Map param) {
+        HashMap map = orderBillDao.searchReviewDriverOrderBill(param);
+        return map;
     }
 }

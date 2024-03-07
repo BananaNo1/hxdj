@@ -27,6 +27,35 @@
         where order_id = #{orderId}
     </update>
 
-
+    <select id="searchReviewDriverOrderBill" parameterType="Map" resultType="HashMap">
+        select cast(b.total as char)                as total,
+               cast(b.real_pay as char)             as realPay,
+               cast(b.mileage_fee as char)          as mileageFee,
+               cast(o.favour_fee as char)           as favourFee,
+               cast(o.incentive_fee as char)        as incentiveFee,
+               cast(b.waiting_fee as char)          as waitingFee,
+               cast(o.real_mileage as char)         as realMileage,
+               cast(b.return_fee as char)           as returnFee,
+               cast(b.parking_fee as char)          as parkingFee,
+               cast(b.toll_fee as char)             as tollFee,
+               cast(b.other_fee as char)            as otherFee,
+               cast(b.voucher_fee as char)          as voucherFee,
+               o.waiting_minute                     as waitingMinute,
+               b.base_mileage                       as baseMileage,
+               cast(b.base_mileage_price as char)   as baseMileagePrice,
+               cast(b.exceed_mileage_price as char) as exceedMileagePrice,
+               b.base_minute                        as baseMinute,
+               cast(b.exceed_mileage_price as char) as exceedMileagePrice,
+               b.base_return_mileage                as baseReturnMileage,
+               cast(b.exceed_return_price as char)  as exceedReturnPrice,
+               cast(o.return_mileage as char)       as returnMileage,
+               cast(p.tax_fee as char)              as taxFee,
+               cast(p.driver_income as char)        as driverIncome,
+        from tb_order o
+                 join tb_order_bill b on o.id = b.order_id
+                 join tb_order_profitsharing p on o.id = p.order_id
+        where o.id = #{orderId} and o.driver_id= #{driverId}
+            and o.`status`=5
+    </select>
 
 </mapper>
