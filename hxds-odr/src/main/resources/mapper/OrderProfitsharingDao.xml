@@ -9,4 +9,17 @@
         set order_id = #{orderId}, rule_id = #{ruleId}, amount_fee = #{amountFee}, payment_rate = #{paymentRate}, payment_fee = #{paymentFee}, tax_rate = #{taxRate}, tax_fee = #{taxFee}, system_income = #{systemIncome}, driver_income = #{driverIncome}, `status` = 1
     </insert>
 
+    <select id="searchDriverIncome" parameterType="String" resultType="HashMap">
+        select p.id                        as profitsharingId,
+               cast(driver_income as char) as driverIncome
+        from tb_order_profitsharing p
+                 join tb_order o on p.order_id = o.id
+        where o.uuid = #{uuid}
+    </select>
+
+    <update id="updateProfitsharingStatus" parameterType="long">
+        update tb_order_profitsharing
+        set `status` =2
+        where id = #{profitsharingId}
+    </update>
 </mapper>

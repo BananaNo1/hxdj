@@ -312,4 +312,33 @@
         set prepay_id = #{prepayId}
         where id = #{orderId}
     </update>
+
+    <select id="searchOrderIdAndStatus" parameterType="String" resultType="HashMap">
+        select cast(id as char) as id,
+               `status`
+        from tb_order
+        where uuid = #{uuid}
+    </select>
+
+    <select id="searchDriverIdAndIncentiveFee" parameterType="String" resultType="HashMap">
+        select cast(driver_id as char)     as driverId,
+               cast(incentive_fee as char) as incentiveFee
+        from tb_order
+        where uuid = #{uuid}
+    </select>
+
+    <update id="updateOrderPayIdAndStatus" parameterType="Map">
+        update tb_order
+        set pay_id  = #{payId},
+            `status`=7,
+            pay_time=#{payTime}
+        where uuid = #{uuid}
+    </update>
+
+    <update id="finishOrder" parameterType="String">
+        update tb_order
+        set `status`=8
+        where uuid = #{uuid}
+    </update>
+
 </mapper>

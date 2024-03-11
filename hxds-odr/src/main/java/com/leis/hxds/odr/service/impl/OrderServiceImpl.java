@@ -1,16 +1,26 @@
 package com.leis.hxds.odr.service.impl;
 
+import cn.hutool.core.date.DateField;
+import cn.hutool.core.date.DateTime;
 import cn.hutool.core.map.MapUtil;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.codingapi.txlcn.tc.annotation.LcnTransaction;
 import com.leis.hxds.common.exception.HxdsException;
 import com.leis.hxds.common.util.PageUtils;
+import com.leis.hxds.odr.controller.form.TransferForm;
 import com.leis.hxds.odr.db.dao.OrderBillDao;
 import com.leis.hxds.odr.db.dao.OrderDao;
 import com.leis.hxds.odr.db.pojo.OrderBillEntity;
 import com.leis.hxds.odr.db.pojo.OrderEntity;
+import com.leis.hxds.odr.feign.DrServiceApi;
+import com.leis.hxds.odr.quartz.QuartzUtil;
+import com.leis.hxds.odr.quartz.job.HandleProfitsharingJob;
 import com.leis.hxds.odr.service.OrderService;
+import org.quartz.JobBuilder;
+import org.quartz.JobDataMap;
+import org.quartz.JobDetail;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -19,6 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,11 +39,13 @@ import java.util.concurrent.TimeUnit;
 public class OrderServiceImpl implements OrderService {
 
     @Resource
+    private QuartzUtil quartzUtil;
+    @Resource
+    private DrServiceApi drServiceApi;
+    @Resource
     private OrderDao orderDao;
-
     @Resource
     private OrderBillDao orderBillDao;
-
     @Resource
     private RedisTemplate redisTemplate;
 
@@ -310,5 +323,69 @@ public class OrderServiceImpl implements OrderService {
             throw new HxdsException("更新预支付订单ID失败");
         }
         return rows;
+    }
+
+    @Override
+    @Transactional
+    @LcnTransaction
+    public void handlePayment(String uuid, String payId, String driverOpenId, String payTime) {
+        /**
+         * 更新订单状态之前，先查询订单的状态
+         * 因为乘客端付款成功之后，会主动发起Ajax请求，要求更新订单状态。
+         * 所以后端接收到付款通知消息之后，不要着急修改订单状态，先看一下订单是否已经是7状态
+         */
+        HashMap map = orderDao.searchOrderIdAndStatus(uuid);
+        int status = MapUtil.getInt(map, "status");
+        if (status == 7) {
+            return;
+        }
+
+        HashMap param = new HashMap<>() {{
+            put("uuid", uuid);
+            put("payId", payId);
+            put("payTime", payTime);
+        }};
+
+        //更新订单记录的PayId、状态和付款时间
+        int rows = orderDao.updateOrderPayIdAndStatus(param);
+        if (rows != 1) {
+            throw new HxdsException("更新支付订单ID失败");
+        }
+
+        //查询系统奖励
+        map = orderDao.searchDriverIdAndIncentiveFee(uuid);
+        String incentiveFee = MapUtil.getStr(map, "incentiveFee");
+        long driverId = MapUtil.getLong(map, "driverId");
+        //判断系统奖励费是否大于0
+        if (new BigDecimal(incentiveFee).compareTo(new BigDecimal("0.00")) == 1) {
+            TransferForm transferForm = new TransferForm();
+            transferForm.setUuid(IdUtil.simpleUUID());
+            transferForm.setAmount(incentiveFee);
+            transferForm.setDriverId(driverId);
+            transferForm.setType((byte) 2);
+            transferForm.setRemark("系统奖励费");
+            //给司机钱包转账奖励费
+            drServiceApi.transfer(transferForm);
+        }
+        //先判断是否有分账定时器
+        if (quartzUtil.checkExists(uuid, "代驾单分账任务组") || quartzUtil.checkExists(uuid, "查询代驾单分账任务组")) {
+            //存在分账定时器就不需要再执行分账
+            return;
+        }
+        //执行分账
+        JobDetail jobDetail = JobBuilder.newJob(HandleProfitsharingJob.class).build();
+        Map dataMap = jobDetail.getJobDataMap();
+        dataMap.put("uuid", uuid);
+        dataMap.put("driverOpenId", driverOpenId);
+        dataMap.put("payId", payId);
+
+        //2分钟之后执行分账定时器
+        DateTime executeDate = new DateTime().offset(DateField.MINUTE, 2);
+        quartzUtil.addJob(jobDetail, uuid, "代驾单分账任务组", executeDate);
+        ////更新订单状态为已完成状态 8
+        rows = orderDao.finishOrder(uuid);
+        if (rows != 1) {
+            throw new HxdsException("更新订单结束状态失败");
+        }
     }
 }

@@ -7,4 +7,14 @@
         insert into tb_wallet
         set driver_id =#{driverId}, balance =#{balance}, password = #{password}
     </insert>
+
+    <update id="updateWalletBalance" parameterType="map">
+        update tb_wallet
+        set balance = balance +#{amount}
+        where driver_id = #{driverId}
+        <if test="amount &lt;0 and password != null">
+            and balance > ABS(#{amount})
+            and password = MD5(CONCAT(MD5(driver_id),#{password}))
+        </if>
+    </update>
 </mapper>

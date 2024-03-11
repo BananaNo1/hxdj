@@ -51,4 +51,6 @@ public interface OrderService {
     HashMap validCanPayOrder(Map param);
 
     int updateOrderPrepayId(Map param);
+
+    void handlePayment(String uuid, String payId, String driverOpenId, String payTime);
 }
