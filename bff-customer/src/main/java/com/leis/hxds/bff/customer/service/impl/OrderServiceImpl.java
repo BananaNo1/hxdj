@@ -320,7 +320,7 @@ public class OrderServiceImpl implements OrderService {
                 //uuid用于付款成功后，移动端主动请求更新充值状态
                 map.put("uuid", uuid);
                 return map;
-            }else{
+            } else {
                 log.error("创建支付订单失败");
                 throw new HxdsException("创建支付订单失败");
             }
@@ -328,5 +328,14 @@ public class OrderServiceImpl implements OrderService {
             log.error("创建支付订单失败");
             throw new HxdsException("创建支付订单失败");
         }
+    }
+
+    @Override
+    @Transactional
+    @LcnTransaction
+    public String updateOrderAboutPayment(UpdateOrderAboutPaymentForm form) {
+        R r = odrServiceApi.updateOrderAboutPayment(form);
+        String result = MapUtil.getStr(r, "result");
+        return result;
     }
 }

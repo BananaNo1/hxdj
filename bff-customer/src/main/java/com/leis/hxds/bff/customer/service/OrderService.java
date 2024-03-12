@@ -19,4 +19,6 @@ public interface OrderService {
     HashMap searchOrderById(SearchOrderByIdForm form);
 
     HashMap createWxPayment(long orderId, long customerId, Long voucherId);
+
+    String updateOrderAboutPayment(UpdateOrderAboutPaymentForm form);
 }

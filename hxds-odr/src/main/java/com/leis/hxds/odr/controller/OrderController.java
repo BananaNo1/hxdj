@@ -272,4 +272,12 @@ public class OrderController {
             response.sendError(500, "数字签名异常");
         }
     }
+
+    @PostMapping("/updateOrderAboutPayment")
+    @Operation(summary = "查询司机是否关联某订单")
+    public R updateOrderAboutPayment(@RequestBody @Valid UpdateOrderAboutPaymentForm form) {
+        Map param = BeanUtil.beanToMap(form);
+        String result = orderService.updateOrderAboutPayment(param);
+        return R.ok().put("result", result);
+    }
 }
