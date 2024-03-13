@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class OrderCommentServiceImpl implements OrderCommentService {
@@ -77,5 +78,11 @@ public class OrderCommentServiceImpl implements OrderCommentService {
             throw new HxdsException("保存订单评价失败");
         }
         return rows;
+    }
+
+    @Override
+    public HashMap searchCommentByOrderId(Map param) {
+        HashMap map = orderCommentDao.searchCommentByOrderId(param);
+        return map;
     }
 }

@@ -30,4 +30,6 @@ public interface OrderService {
     String updateOrderAboutPayment(long driverId, UpdateOrderAboutPaymentForm form);
 
     PageUtils searchDriverOrderByPage(SearchDriverOrderByPageForm form);
+
+    HashMap searchOrderById(SearchOrderByIdForm form);
 }

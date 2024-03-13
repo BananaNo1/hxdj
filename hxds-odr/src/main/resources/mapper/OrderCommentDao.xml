@@ -7,4 +7,19 @@
         insert into tb_order_comment
         set order_id = #{orderId}, driver_id = #{driverId}, customer_id = #{customerId}, rate = #{rate}, remark = #{remark}, status = #{status}, instance_id =#{instanceId}, create_time=#{createTime}
     </insert>
+
+    <select id="searchCommentByOrderId" parameterType="Map" resultType="HashMap">
+        select cast(id as char) as id,
+        cast(driver_id as char) as driverId,
+        cast(customer_id as char) as customerId,
+        rate,remark,`status`,instance_id as instanceId,
+        DATE_FORMAT(create_time,'%Y-%m-%d %H:%i:%s') as createTime
+        from tb_order_comment where order_id = #{orderId}
+        <if test="driverId!=null">
+            and driver_id =#{driverId}
+        </if>
+        <if test="customerId!=null">
+            and customer_id = #{customerId}
+        </if>
+    </select>
 </mapper>

@@ -52,4 +52,10 @@ public interface OdrServiceApi {
 
     @PostMapping("/order/searchDriverOrderByPage")
     R searchDriverOrderByPage(SearchDriverOrderByPageForm form);
+
+    @PostMapping("/order/searchOrderById")
+    R searchOrderById(SearchOrderByIdForm form);
+
+    @PostMapping("/comment/searchCommentByOrderId")
+    R searchCommentByOrderId(SearchCommentByOrderIdForm form);
 }
