@@ -5,6 +5,7 @@ import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.stp.StpUtil;
 import com.leis.hxds.bff.driver.controller.form.*;
 import com.leis.hxds.bff.driver.service.OrderService;
+import com.leis.hxds.common.util.PageUtils;
 import com.leis.hxds.common.util.R;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -131,4 +132,15 @@ public class OrderController {
         String result = orderService.updateOrderAboutPayment(driverId, form);
         return R.ok().put("result", result);
     }
+
+    @PostMapping("/searchDriverOrderByPage")
+    @SaCheckLogin
+    @Operation(summary = "查看订单分页记录")
+    public R searchDriverOrderByPage(@RequestBody @Valid SearchDriverOrderByPageForm form) {
+        long driverId = StpUtil.getLoginIdAsLong();
+        form.setDriverId(driverId);
+        PageUtils pageUtils = orderService.searchDriverOrderByPage(form);
+        return R.ok().put("result", pageUtils);
+    }
+
 }

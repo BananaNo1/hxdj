@@ -21,6 +21,7 @@ import com.leis.hxds.odr.feign.DrServiceApi;
 import com.leis.hxds.odr.quartz.QuartzUtil;
 import com.leis.hxds.odr.quartz.job.HandleProfitsharingJob;
 import com.leis.hxds.odr.service.OrderService;
+import org.checkerframework.checker.units.qual.A;
 import org.quartz.JobBuilder;
 import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
@@ -490,5 +491,20 @@ public class OrderServiceImpl implements OrderService {
             e.printStackTrace();
             throw new HxdsException("更新订单相关付款信息失败");
         }
+    }
+
+    @Override
+    public PageUtils searchDriverOrderByPage(Map param) {
+        long count = orderDao.searchDriverOrderCount(param);
+        ArrayList<HashMap> list = null;
+        if (count > 0) {
+            list = orderDao.searchDriverOrderByPage(param);
+        } else {
+            list = new ArrayList<>();
+        }
+        int start = (Integer) param.get("start");
+        int length = (Integer) param.get("length");
+        PageUtils pageUtils = new PageUtils(list, count, start, length);
+        return pageUtils;
     }
 }

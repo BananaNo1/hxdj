@@ -63,6 +63,12 @@ public interface OrderDao {
     HashMap searchUuidAndStatus(long orderId);
 
     int updateOrderAboutPayment(Map param);
+
+    long validDriverAndCustomerOwnOrder(Map param);
+
+    ArrayList<HashMap> searchDriverOrderByPage(Map param);
+
+    long searchDriverOrderCount(Map param);
 }
 
 

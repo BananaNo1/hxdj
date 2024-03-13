@@ -49,4 +49,7 @@ public interface OdrServiceApi {
 
     @PostMapping("/order/updateOrderAboutPayment")
     R updateOrderAboutPayment(UpdateOrderAboutPaymentForm form);
+
+    @PostMapping("/order/searchDriverOrderByPage")
+    R searchDriverOrderByPage(SearchDriverOrderByPageForm form);
 }

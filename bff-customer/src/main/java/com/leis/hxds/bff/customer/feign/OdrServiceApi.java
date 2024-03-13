@@ -36,4 +36,7 @@ public interface OdrServiceApi {
 
     @PostMapping("/order/updateOrderAboutPayment")
     R updateOrderAboutPayment(UpdateOrderAboutPaymentForm form);
+
+    @PostMapping("/comment/insertComment")
+    R insertComment(InsertCommentForm form);
 }

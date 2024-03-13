@@ -1,5 +1,6 @@
 package com.leis.hxds.bff.driver.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.NumberUtil;
 import com.codingapi.txlcn.tc.annotation.LcnTransaction;
@@ -7,6 +8,7 @@ import com.leis.hxds.bff.driver.controller.form.*;
 import com.leis.hxds.bff.driver.feign.*;
 import com.leis.hxds.bff.driver.service.OrderService;
 import com.leis.hxds.common.exception.HxdsException;
+import com.leis.hxds.common.util.PageUtils;
 import com.leis.hxds.common.util.R;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -258,5 +260,13 @@ public class OrderServiceImpl implements OrderService {
         r = odrServiceApi.updateOrderAboutPayment(form);
         String result = MapUtil.getStr(r, "result");
         return result;
+    }
+
+    @Override
+    public PageUtils searchDriverOrderByPage(SearchDriverOrderByPageForm form) {
+        R r = odrServiceApi.searchDriverOrderByPage(form);
+        HashMap map = (HashMap) r.get("result");
+        PageUtils pageUtils = BeanUtil.toBean(map, PageUtils.class);
+        return pageUtils;
     }
 }
