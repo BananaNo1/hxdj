@@ -1,6 +1,7 @@
 package com.leis.hxds.odr.service;
 
 import com.leis.hxds.common.util.PageUtils;
+import com.leis.hxds.odr.controller.form.SearchCustomerOrderByPageForm;
 import com.leis.hxds.odr.db.pojo.OrderBillEntity;
 import com.leis.hxds.odr.db.pojo.OrderEntity;
 
@@ -57,4 +58,7 @@ public interface OrderService {
     String updateOrderAboutPayment(Map param);
 
     PageUtils searchDriverOrderByPage(Map param);
+
+    PageUtils searchCustomerOrderByPage(Map param);
+
 }

@@ -1,5 +1,6 @@
 package com.leis.hxds.bff.customer.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.map.MapUtil;
 import cn.hutool.core.util.IdUtil;
@@ -10,6 +11,7 @@ import com.leis.hxds.bff.customer.controller.form.*;
 import com.leis.hxds.bff.customer.feign.*;
 import com.leis.hxds.bff.customer.service.OrderService;
 import com.leis.hxds.common.exception.HxdsException;
+import com.leis.hxds.common.util.PageUtils;
 import com.leis.hxds.common.util.R;
 import com.leis.hxds.common.wxpay.MyWXPayConfig;
 import com.leis.hxds.common.wxpay.WXPay;
@@ -337,5 +339,13 @@ public class OrderServiceImpl implements OrderService {
         R r = odrServiceApi.updateOrderAboutPayment(form);
         String result = MapUtil.getStr(r, "result");
         return result;
+    }
+
+    @Override
+    public PageUtils searchCustomerOrderByPage(SearchCustomerOrderByPageForm form) {
+        R r = odrServiceApi.searchCustomerOrderByPage(form);
+        HashMap map = (HashMap) r.get("result");
+        PageUtils pageUtils = BeanUtil.toBean(map, PageUtils.class);
+        return pageUtils;
     }
 }
