@@ -7,6 +7,7 @@ import java.util.Date;
 
 /**
  * 订单评价表
+ *
  * @TableName tb_order_comment
  */
 @Data
@@ -55,6 +56,16 @@ public class OrderCommentEntity implements Serializable {
      * 创建时间
      */
     private Date createTime;
+
+    /**
+     * 审批人Id
+     */
+    private Integer userId;
+
+    /**
+     * 审批人姓名
+     */
+    private String userName;
 
     private static final long serialVersionUID = 1L;
 }

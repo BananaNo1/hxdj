@@ -73,6 +73,8 @@ public interface OrderDao {
     ArrayList<HashMap> searchCustomerOrderByPage(Map param);
 
     long searchCustomerOrderCount(Map param);
+
+
 }
 
 

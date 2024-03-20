@@ -22,4 +22,84 @@
             and customer_id = #{customerId}
         </if>
     </select>
+
+    <select id="searchCommentByPage" parameterType="Map" resultType="HashMap">
+        select cast(c.id as char) as commentId,
+        cast(o.id as char) as orderId,
+        cast(o.driver_id as char) as driverId,
+        cast(o.customer_id as char) as customerId,
+        IFNULL(c.rate, 5) as rate,
+        IFNULL(c.remark, '默认好评') as remark,
+        IFNULL(c.startus, 1) as `status`,
+        DATE_FORMAT(o.accept_time, '%Y-%m-%d %H:%i:%s') as acceptTime,
+        c.instance_id as instanceId,
+        cast(c.user_id as char) as userId,
+        c.user_name as userName,
+        IFNULL((c.user_id=#{userId},false)) as `handler`
+        from tb_order o
+        left join tb_order_comment c on c.order_id = o.id
+        where 1=1
+        and o.status >= 7
+        <if test="orderId!=null">
+            and o.id =#{o.orderId}
+        </if>
+        <if test="driverId!=null">
+            and o.driver_Id =#{driverId}
+        </if>
+        <if test="customerId!=null">
+            and o.customer_id =#{customerId}
+        </if>
+        <if test='rate!=null and rate=="差评"'>
+            and c.rate between 1 and 2
+        </if>
+        <if test='rate!=null and rate=="中评"'>
+            and c.rate between 3 and 4
+        </if>
+        <if test='rate!=null and rate=="好评"'>
+            and (c.rate = 5 or c.rate is null)
+        </if>
+        <if test="startDate!=null and endDate!=null">
+            and o.accept_time between #{startDate} and #{endDate}
+        </if>
+        <if test="status!=null and status==1">
+            and (c.`status`=1 or c.`status` is null)
+        </if>
+        <if test="status!=null and status!=1">
+            and c.`status`=#{status}
+        </if>
+        order by o.id desc
+        limit #{start},#{length}
+    </select>
+
+    <select id="searchCommentCount" parameterType="Map" resultType="long">
+        select count(*)
+        from tb_order o
+        left join tb_order_comment c on c.order_id = o.id
+        where 1=1
+        and o.status>=7
+        <if test="orderId!=null">
+            and o.driver_id =#{driverId}
+        </if>
+        <if test="customerId!=null">
+            and o.customer_id = #{customerId}
+        </if>
+        <if test='rate!=null and rate =="差评"'>
+            and c.rate between 1 and 2
+        </if>
+        <if test='rate!=null and rate =="中评"'>
+            and c.rate between 3 and 4
+        </if>
+        <if test='rate!=null and rate =="好评"'>
+            and (c.rate =5 or c.rate is null)
+        </if>
+        <if test="startDate!=null and endDate!=null">
+            and o.accept_time between #{startDate} and #{endDate}
+        </if>
+        <if test="status!=null and status==1">
+            and (c.`status`=1 or c.`status` is null)
+        </if>
+        <if test="status!=null and status!=1 ">
+            and c.`status` = #{status}
+        </if>
+    </select>
 </mapper>
