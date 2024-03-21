@@ -6,6 +6,8 @@ import com.codingapi.txlcn.tc.annotation.LcnTransaction;
 import com.leis.hxds.common.util.PageUtils;
 import com.leis.hxds.common.util.R;
 import com.leis.hxds.mis.api.controller.form.AcceptCommentAppealForm;
+import com.leis.hxds.mis.api.controller.form.HandleCommentAppealForm;
+import com.leis.hxds.mis.api.controller.form.SearchAppealContentForm;
 import com.leis.hxds.mis.api.controller.form.SearchCommentByPageForm;
 import com.leis.hxds.mis.api.db.dao.UserDao;
 import com.leis.hxds.mis.api.feign.OdrServiceApi;
@@ -44,4 +46,19 @@ public class OrderCommentServiceImpl implements OrderCommentService {
         form.setUserName(name);
         workflowServiceApi.acceptCommentAppeal(form);
     }
+
+    @Override
+    @Transactional
+    @LcnTransaction
+    public void handleCommentAppeal(HandleCommentAppealForm form) {
+        workflowServiceApi.handleCommentAppeal(form);
+    }
+
+    @Override
+    public HashMap searchAppealContent(SearchAppealContentForm form) {
+        R r = workflowServiceApi.searchAppealContent(form);
+        HashMap map = (HashMap) r.get("result");
+        return map;
+    }
+
 }
