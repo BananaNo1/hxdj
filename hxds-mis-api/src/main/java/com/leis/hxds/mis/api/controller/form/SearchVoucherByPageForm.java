@@ -1,4 +1,4 @@
-package com.leis.hxds.vhr.controller.form;
+package com.leis.hxds.mis.api.controller.form;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
