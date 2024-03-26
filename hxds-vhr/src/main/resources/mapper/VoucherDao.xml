@@ -30,6 +30,7 @@
         </if>
         `status` = #{status}
     </insert>
+
     <select id="searchIdByUUID" parameterType="list" resultType="String">
         SELECT CAST(id AS CHAR) AS id
         FROM tb_voucher
@@ -148,5 +149,47 @@
         </choose>
     </select>
 
+    <select id="searchVoucherById" parameterType="long" resultType="HashMap">
+        select uuid,
+               `name`,
+               remark,
+               tag,
+               total_quota                         as totalQuota,
+               take_count                          as takeCount,
+               used_count                          as usedCount,
+               discount,
+               with_amount                         as withAmount,
+               `type`,
+               limit_quota                         as limitQuota,
+               time_type                           as timeType,
+               days,
+               DATE_FORMAT(start_time, '%Y-%m-%d') as startTime,
+               DATE_FORMAT(end_time, '%Y-%m-%d')   as endTime,
+               `status`
+        from tb_voucher
+        where id = #{id}
+    </select>
 
+    <update id="updateVoucherStatus" parameterType="Map">
+        update tb_voucher
+        set `status`=#{status}
+        where id = #{id}
+    </update>
+
+    <select id="searchVoucherTakeCount" resultType="HashMap">
+        select id,uuid,total_quota as totalQuota, take_count as takeCount
+        from tb_voucher
+        where id in
+        <foreach collection="array" open="(" separator="," close=")" item="one">
+            #{one}
+        </foreach>
+    </select>
+
+    <delete id="deleteVoucherByIds">
+        delete from tb_voucher
+        where id in
+        <foreach collection="array" open="(" separator="," close=")" item="one">
+            #{one}
+        </foreach>
+    </delete>
 </mapper>

@@ -9,4 +9,8 @@ public interface VoucherService {
     PageUtils searchVoucherByPage(Map param);
 
     int insert(VoucherEntity voucherEntity);
+
+    int updateVoucherStatus(Map param);
+
+    int deleteVoucherByIds(Long[] ids);
 }

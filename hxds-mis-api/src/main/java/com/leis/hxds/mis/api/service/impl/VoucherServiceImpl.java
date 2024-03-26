@@ -5,8 +5,10 @@ import cn.hutool.core.map.MapUtil;
 import com.codingapi.txlcn.tc.annotation.LcnTransaction;
 import com.leis.hxds.common.util.PageUtils;
 import com.leis.hxds.common.util.R;
+import com.leis.hxds.mis.api.controller.form.DeleteVoucherByIdsForm;
 import com.leis.hxds.mis.api.controller.form.InsertVoucherForm;
 import com.leis.hxds.mis.api.controller.form.SearchVoucherByPageForm;
+import com.leis.hxds.mis.api.controller.form.UpdateVoucherStatusForm;
 import com.leis.hxds.mis.api.feign.VhrServiceApi;
 import com.leis.hxds.mis.api.service.VoucherService;
 import org.springframework.stereotype.Service;
@@ -34,6 +36,24 @@ public class VoucherServiceImpl implements VoucherService {
     @LcnTransaction
     public int insertVoucher(InsertVoucherForm form) {
         R r = vhrServiceApi.insertVoucher(form);
+        int rows = MapUtil.getInt(r, "rows");
+        return rows;
+    }
+
+    @Override
+    @Transactional
+    @LcnTransaction
+    public int updateVoucherStatus(UpdateVoucherStatusForm form) {
+        R r = vhrServiceApi.updateVoucherStatus(form);
+        int rows = MapUtil.getInt(r, "rows");
+        return rows;
+    }
+
+    @Override
+    @Transactional
+    @LcnTransaction
+    public int deleteVoucherByIds(DeleteVoucherByIdsForm form) {
+        R r = vhrServiceApi.deleteVoucherByIds(form);
         int rows = MapUtil.getInt(r, "rows");
         return rows;
     }

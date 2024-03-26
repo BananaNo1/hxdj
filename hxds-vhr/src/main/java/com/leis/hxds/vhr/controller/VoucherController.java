@@ -4,8 +4,10 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.IdUtil;
 import com.leis.hxds.common.util.PageUtils;
 import com.leis.hxds.common.util.R;
+import com.leis.hxds.vhr.controller.form.DeleteVoucherByIdsForm;
 import com.leis.hxds.vhr.controller.form.InsertVoucherForm;
 import com.leis.hxds.vhr.controller.form.SearchVoucherByPageForm;
+import com.leis.hxds.vhr.controller.form.UpdateVoucherStatusForm;
 import com.leis.hxds.vhr.db.pojo.VoucherEntity;
 import com.leis.hxds.vhr.service.VoucherService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -46,6 +48,21 @@ public class VoucherController {
         String uuid = IdUtil.simpleUUID();
         entity.setUuid(uuid);
         int rows = voucherService.insert(entity);
+        return R.ok().put("rows", rows);
+    }
+
+    @PostMapping("/updateVoucherStatus")
+    @Operation(summary = "更新代金券状态")
+    public R updateVoucherStatus(@RequestBody @Valid UpdateVoucherStatusForm form) {
+        Map param = BeanUtil.beanToMap(form);
+        int rows = voucherService.updateVoucherStatus(param);
+        return R.ok().put("rows", rows);
+    }
+
+    @PostMapping("/deleteVoucherByIds")
+    @Operation(summary = "删除代金券")
+    public R deleteVoucherByIds(@RequestBody @Valid DeleteVoucherByIdsForm form) {
+        int rows = voucherService.deleteVoucherByIds(form.getIds());
         return R.ok().put("rows", rows);
     }
 }

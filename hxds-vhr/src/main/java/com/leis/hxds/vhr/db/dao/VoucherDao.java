@@ -15,6 +15,14 @@ public interface VoucherDao {
     ArrayList<HashMap> searchVoucherByPage(Map param);
 
     long searchVoucherCount(Map param);
+
+    HashMap searchVoucherById(long id);
+
+    int updateVoucherStatus(Map param);
+
+    ArrayList<HashMap> searchVoucherTakeCount(Long[] ids);
+
+    int deleteVoucherByIds(Long[] ids);
 }
 
 
