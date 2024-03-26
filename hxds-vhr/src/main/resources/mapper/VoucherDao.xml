@@ -192,4 +192,98 @@
             #{one}
         </foreach>
     </delete>
+    <!--查询未领取的代金券分页记录-->
+    <select id="searchUnTakeVoucherByPage" parameterType="Map" resultType="HashMap">
+        select cast(id as char)                     as id,
+               uuid,
+               cast(discount as char)               as discount,
+               FLOOR(with_amount)                   as withAmount,
+               remark,
+               time_type                            as timeType,
+               days,
+               DATE_FORMAT(start_time, '%Y-%m-%d')  as startTime,
+               DATE_FORMAT(end_time, '%Y-%m-%d')    as endTime,
+               DATE_FORMAT(create_time, '%Y-%m-%d') as createTime
+        from tb_voucher
+        where `status` = 1
+          and (total_quota = 0 or take_count &lt; total_quota)
+          and type = 1
+          and (limit_quota = 0 or
+               id not in (select voucher_id from tb_voucher_customer where customer_id = #{customerId}))
+        order by id desc
+            limit #{start}, #{length}
+    </select>
+    <!--查询未领取的代金券总数-->
+    <select id="searchUnTakeVoucherCount" parameterType="Map" resultType="long">
+        select count(*)
+        from tb_voucher
+        where `status` = 1
+          and (total_quota = 0 or take_count &lt; total_quota)
+          and type = 1
+          and (limit_quota = 0 or
+               id not in (select voucher_id from tb_voucher_customer where customer_id = #{customerId}))
+    </select>
+    <!--查询未使用的代金券分页记录-->
+    <select id="searchUnUseVoucherByPage" parameterType="Map" resultType="HashMap">
+        select cast(v.id as char)                      as id,
+               uuid,
+               cast(v.discount as char)                as discount,
+               FLOOR(with_amount)                      as withAmount,
+               v.remark,
+               v.time_type                             as timeType,
+               v.days,
+               DATE_FORMAT(vc.start_time, '%Y-%m-%d')  as startTime,
+               DATE_FORMAT(vc.end_time, '%Y-%m-%d')    as startTime,
+               DATE_FORMAT(vc.create_time, '%Y-%m-%d') as createTime
+        from tb_voucher v
+                 join tb_voucher_customer vc on v.id = vc.voucher_id
+        where vc.customer_id = #{customerId}
+          and vc.`status` = 1
+          and (
+                now() between vc.start_time and vc.end_time
+                or (vc.start_time is null and vc.end_time is null)
+            )
+        order by vc.id desc
+            limit #{start}, #{length};
+    </select>
+    <!--查询未使用的代金券总数-->
+    <select id="searchUnUseVoucherCount" parameterType="Map" resultType="long">
+        select count(*)
+        from tb_voucher v
+                 join tb_voucher_customer vc on v.id = vc.voucher_id
+        where vc.customer_id = #{customerId}
+          and vc.`status` = 1
+          and (
+                now() between vc.start_time and vc.end_time
+                or (vc.start_time is null and vc.end_time is null)
+            )
+    </select>
+    <!--查询已使用的代金券分页记录-->
+    <select id="searchUsedVoucherByPage" parameterType="Map" resultType="HashMap">
+        select cast(id as char)                        as id,
+               uuid,
+               cast(v.discount as char)                as discount,
+               FLOOR(with_amount)                      as withAmount,
+               v.remark,
+               v.time_type                             as timeType,
+               v.days,
+               DATE_FORMAT(vc.start_time, '%Y-%m-%d')  as startTime,
+               DATE_FORMAT(vc.end_time, '%Y-%m-%d')    as startTime,
+               DATE_FORMAT(vc.create_time, '%Y-%m-%d') as createTime
+        from tb_voucher_customer vc
+                 join tb_voucher v on v.id = vc.voucher_id
+        where vc.customer_id = #{customerId}
+          and vc.`status` = 2
+        order by vc.id
+            limit #{start}, #{length}
+    </select>
+    <!--查询已使用的代金券总数-->
+    <select id="searchUsedVoucherCount" parameterType="Map" resultType="long">
+        select count(*)
+        from tb_voucher_customer vc
+                 join tb_voucher v on v.id = vc.voucher_id
+        where vc.customer_id = #{customerId}
+          and vc.`status` = 2
+    </select>
+
 </mapper>

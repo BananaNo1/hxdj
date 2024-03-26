@@ -118,6 +118,51 @@ public class VoucherServiceImpl implements VoucherService {
         return 0;
     }
 
+    @Override
+    public PageUtils searchUnTakeVoucherByPage(Map param) {
+        long count = voucherDao.searchUnTakeVoucherCount(param);
+        ArrayList<HashMap> list = null;
+        if (count > 0) {
+            list = voucherDao.searchUnTakeVoucherByPage(param);
+        } else {
+            list = new ArrayList<>();
+        }
+        int start = MapUtil.getInt(param, "start");
+        int length = MapUtil.getInt(param, "length");
+        PageUtils pageUtils = new PageUtils(list, count, start, length);
+        return pageUtils;
+    }
+
+    @Override
+    public PageUtils searchUnUseVoucherByPage(Map param) {
+        long count = voucherDao.searchUnUseVoucherCount(param);
+        ArrayList<HashMap> list = null;
+        if (count > 0) {
+            list = voucherDao.searchUnUseVoucherByPage(param);
+        } else {
+            list = new ArrayList<>();
+        }
+        int start = MapUtil.getInt(param, "start");
+        int length = MapUtil.getInt(param, "length");
+        PageUtils pageUtils = new PageUtils(list, count, start, length);
+        return pageUtils;
+    }
+
+    @Override
+    public PageUtils searchUsedVoucherByPage(Map param) {
+        long count =  voucherDao.searchUsedVoucherCount(param);
+        ArrayList<HashMap> list = null;
+        if (count > 0) {
+            list = voucherDao.searchUsedVoucherByPage(param);
+        } else {
+            list = new ArrayList<>();
+        }
+        int start = MapUtil.getInt(param, "start");
+        int length = MapUtil.getInt(param, "length");
+        PageUtils pageUtils = new PageUtils(list, count, start, length);
+        return pageUtils;
+    }
+
     private void saveVoucherCache(VoucherEntity entity) {
         String uuid = entity.getUuid();
         HashMap map = new HashMap() {{

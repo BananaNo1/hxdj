@@ -13,4 +13,8 @@ public interface VoucherService {
     int updateVoucherStatus(Map param);
 
     int deleteVoucherByIds(Long[] ids);
+
+    PageUtils searchUnTakeVoucherByPage(Map param);
+    PageUtils searchUnUseVoucherByPage(Map param);
+    PageUtils searchUsedVoucherByPage(Map param);
 }
