@@ -1,9 +1,12 @@
 package com.leis.hxds.vhr.controller;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.IdUtil;
 import com.leis.hxds.common.util.PageUtils;
 import com.leis.hxds.common.util.R;
+import com.leis.hxds.vhr.controller.form.InsertVoucherForm;
 import com.leis.hxds.vhr.controller.form.SearchVoucherByPageForm;
+import com.leis.hxds.vhr.db.pojo.VoucherEntity;
 import com.leis.hxds.vhr.service.VoucherService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -34,5 +37,15 @@ public class VoucherController {
         param.put("start", start);
         PageUtils pageUtils = voucherService.searchVoucherByPage(param);
         return R.ok().put("result", pageUtils);
+    }
+
+    @PostMapping("/insertVoucher")
+    @Operation(summary = "添加代金券")
+    public R insertVoucher(@RequestBody @Valid InsertVoucherForm form) {
+        VoucherEntity entity = BeanUtil.toBean(form, VoucherEntity.class);
+        String uuid = IdUtil.simpleUUID();
+        entity.setUuid(uuid);
+        int rows = voucherService.insert(entity);
+        return R.ok().put("rows", rows);
     }
 }
