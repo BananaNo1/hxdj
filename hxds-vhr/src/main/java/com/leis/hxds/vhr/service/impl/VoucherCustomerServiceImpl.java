@@ -1,8 +1,10 @@
 package com.leis.hxds.vhr.service.impl;
 
+import cn.hutool.core.map.MapUtil;
 import com.codingapi.txlcn.tc.annotation.LcnTransaction;
 import com.leis.hxds.common.exception.HxdsException;
 import com.leis.hxds.vhr.db.dao.VoucherCustomerDao;
+import com.leis.hxds.vhr.db.dao.VoucherDao;
 import com.leis.hxds.vhr.service.VoucherCustomerService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +18,9 @@ public class VoucherCustomerServiceImpl implements VoucherCustomerService {
     @Resource
     private VoucherCustomerDao voucherCustomerDao;
 
+    @Resource
+    private VoucherDao voucherDao;
+
     @Override
     @Transactional
     @LcnTransaction
@@ -25,6 +30,11 @@ public class VoucherCustomerServiceImpl implements VoucherCustomerService {
             int rows = voucherCustomerDao.bindVoucher(param);
             if (rows != 1) {
                 throw new HxdsException("代金券不可用");
+            }
+            long voucherId = MapUtil.getLong(param, "voucherId");
+            rows = voucherDao.updateUsedCount(voucherId);
+            if (rows != 1) {
+                throw new HxdsException("更新代金券使用数量失败");
             }
             return discount;
         }

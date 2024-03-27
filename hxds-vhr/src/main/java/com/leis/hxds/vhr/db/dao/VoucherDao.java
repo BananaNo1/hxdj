@@ -27,13 +27,20 @@ public interface VoucherDao {
     ArrayList<HashMap> searchUnTakeVoucherByPage(Map param);
 
     long searchUnTakeVoucherCount(Map param);
+
     ArrayList<HashMap> searchUnUseVoucherByPage(Map param);
 
     long searchUnUseVoucherCount(Map param);
+
     ArrayList<HashMap> searchUsedVoucherByPage(Map param);
 
     long searchUsedVoucherCount(Map param);
 
+    int takeVoucher(long id);
+
+    HashMap searchBestUnUseVoucher(Map param);
+
+    int updateUsedCount(long id);
 }
 
 

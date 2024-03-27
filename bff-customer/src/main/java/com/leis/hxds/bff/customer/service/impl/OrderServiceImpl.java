@@ -210,6 +210,18 @@ public class OrderServiceImpl implements OrderService {
             map.putAll(temp);
 
             int status = MapUtil.getInt(map, "status");
+
+            //status是6状态，要额外查询最佳代金券
+            if (status == 6) {
+                SearchBestUnUseVoucherForm voucherForm = new SearchBestUnUseVoucherForm();
+                voucherForm.setCustomerId(voucherForm.getCustomerId());
+                BigDecimal total = new BigDecimal(MapUtil.getStr(map, "total"));
+                voucherForm.setAmount(total);
+                r = vhrServiceApi.searchBestUnUseVoucher(voucherForm);
+                temp = (HashMap) r.get("result");
+                map.put("voucher", temp);
+            }
+
             HashMap cmtMap = new HashMap();
             if (status >= 7) {
                 SearchCommentByOrderIdForm commentForm = new SearchCommentByOrderIdForm();
@@ -222,7 +234,7 @@ public class OrderServiceImpl implements OrderService {
                     cmtMap.put("rate", 5);
                 }
             }
-            map.put("comment",cmtMap);
+            map.put("comment", cmtMap);
             return map;
         }
         return null;

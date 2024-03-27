@@ -286,4 +286,28 @@
           and vc.`status` = 2
     </select>
 
+    <update id="takeVoucher" parameterType="long">
+        update tb_voucher
+        set take_count = take_count + 1
+        where id = #{id}
+    </update>
+
+    <select id="searchBestUnUseVoucher" parameterType="Map" resultType="HashMap">
+        select cast(vc.id as char)         as id,
+               cast(vc.voucher_id as char) as voucherId,
+               cast(v.discount as char)    as discount
+        from tb_voucher_customer vc
+                 join tb_voucher v on v.id = vc.voucher_id
+        where vc.customer_id = #{customerId}
+          and vc.`status` = 1
+          and (v.with_amount = 0 or v.with_amount &lt;= #{amount})
+          and (now() between vc.start_time and vc.end_time or (vc.start_time is null and vc.end_time is null))
+        order by v.discount desc limit 1
+    </select>
+
+    <update id="updateUsedCount" parameterType="long">
+        update tb_voucher
+        set used_count = used_count + 1
+        where id = #{id}
+    </update>
 </mapper>

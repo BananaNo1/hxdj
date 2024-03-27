@@ -2,9 +2,7 @@ package com.leis.hxds.bff.customer.controller;
 
 import cn.dev33.satoken.annotation.SaCheckLogin;
 import cn.dev33.satoken.stp.StpUtil;
-import com.leis.hxds.bff.customer.controller.form.SearchUnTakeVoucherByPageForm;
-import com.leis.hxds.bff.customer.controller.form.SearchUnUseVoucherByPageForm;
-import com.leis.hxds.bff.customer.controller.form.SearchUsedVoucherByPageForm;
+import com.leis.hxds.bff.customer.controller.form.*;
 import com.leis.hxds.bff.customer.service.VoucherService;
 import com.leis.hxds.common.util.PageUtils;
 import com.leis.hxds.common.util.R;
@@ -56,4 +54,23 @@ public class VoucherController {
         return R.ok().put("result", pageUtils);
     }
 
+    @PostMapping("/searchUnUseVoucherCount")
+    @SaCheckLogin
+    @Operation(summary = "/查询未使用代金券数量")
+    public R searchUnUseVoucherCount(@RequestBody @Valid SearchUnUseVoucherCountForm form) {
+        long customerId = StpUtil.getLoginIdAsLong();
+        form.setCustomerId(customerId);
+        long result = voucherService.searchUnUseVoucherCount(form);
+        return R.ok().put("result", result);
+    }
+
+    @PostMapping("/takeVoucher")
+    @SaCheckLogin
+    @Operation(summary = "/查询未领取代金券的分页记录")
+    public R takeVoucher(@RequestBody @Valid TakeVoucherForm form) {
+        long customerId = StpUtil.getLoginIdAsLong();
+        form.setCustomerId(customerId);
+        boolean result = voucherService.takeVoucher(form);
+        return R.ok().put("result", result);
+    }
 }
